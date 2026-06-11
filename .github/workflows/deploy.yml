@@ -1,0 +1,33 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      # Uncomment when GCP credentials are configured:
+      # - uses: google-github-actions/auth@v2
+      #   with:
+      #     credentials_json: ${{ secrets.GCP_SA_KEY }}
+      # - run: |
+      #     gcloud builds submit backend --tag gcr.io/${{ secrets.GCP_PROJECT }}/dami-beauty-api
+      #     gcloud run deploy dami-beauty-api --image gcr.io/${{ secrets.GCP_PROJECT }}/dami-beauty-api --region europe-west1
+      - run: echo "Configure GCP_SA_KEY secret to enable Cloud Run deploy"
+
+  deploy-firebase-rules:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install -g firebase-tools
+      # Uncomment when FIREBASE_TOKEN is configured:
+      # - run: firebase deploy --only firestore:rules,storage --token ${{ secrets.FIREBASE_TOKEN }}
+      - run: echo "Configure FIREBASE_TOKEN secret to enable rules deploy"

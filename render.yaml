@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: dami-beauty-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    region: frankfurt
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: USE_MOCK_DB
+        value: "false"
+      - key: FIREBASE_PROJECT_ID
+        value: dami-beauty-353b0
+      - key: CORS_ALLOW_VERCEL
+        value: "true"
+      - key: PAYTR_TEST_MODE
+        value: "true"
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false

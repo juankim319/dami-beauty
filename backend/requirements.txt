@@ -1,0 +1,14 @@
+# Python 3.12–3.14 supported locally. Production Docker image uses 3.12.
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic>=2.12,<3
+pydantic-settings>=2.8,<3
+firebase-admin==6.6.0
+python-multipart==0.0.20
+httpx==0.28.1
+python-jose[cryptography]==3.3.0
+email-validator==2.2.0
+pytest>=8.3,<9
+pytest-asyncio>=0.25,<1
+ruff>=0.8,<1
+openpyxl>=3.1,<4

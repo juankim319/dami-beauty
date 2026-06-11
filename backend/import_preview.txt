@@ -1,0 +1,4 @@
+﻿sheet ▄r³nler data rows 486
+unique models 312
+top categories [('Takma T²rnak & Aksesuar²', 235), ('Manik³r ve Pedik³r Seti', 17), ('Makyaj Seti', 16), ('Di­er Sa Aksesuarlar²', 15), ('Makyaj S³ngeri', 13), ('All²k', 12), ('Y³z Maskesi', 11), ('Kartl²k', 10), ('T²rnak Makas²', 10), ('G÷z Far²', 8), ('Takma Kirpik', 8), ('Sa F²ras² ve Tarak', 8), ('Makyaj F²ras²', 7), ('Dudak Parlat²c²s²', 6), ('Cilt Bak²m Seti', 5)]
+variants per model: max 78 single-variant models 282

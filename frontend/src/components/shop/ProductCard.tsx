@@ -15,7 +15,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link href={`/products/${product.slug}`} className="group block">
       {/* Image — hince: portrait ratio, no border */}
-      <div className="product-img-wrap relative aspect-[3/4] overflow-hidden bg-dami-100 dark:bg-dami-800">
+      <div className="product-img-wrap relative aspect-[3/4] overflow-hidden bg-dami-100 dark:bg-[#3A1F1D]">
         {image ? (
           <Image
             src={image}
@@ -25,7 +25,7 @@ export function ProductCard({ product }: ProductCardProps) {
             sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
           />
         ) : (
-          <div className="flex h-full items-center justify-center bg-dami-100 dark:bg-dami-800">
+          <div className="flex h-full items-center justify-center bg-gradient-to-br from-dami-100 to-dami-200 dark:from-[#3A1F1D] dark:to-[#4A2422]">
             <span className="text-xs tracking-widest text-dami-300 dark:text-dami-600">—</span>
           </div>
         )}

@@ -51,7 +51,7 @@ export function HeroCampaign({ campaign }: HeroCampaignProps) {
       ) : (
         /* No banner — clean full-screen editorial placeholder, hince-style */
         <>
-          <div className="absolute inset-0 bg-dami-100 dark:bg-dami-800" />
+          <div className="absolute inset-0 bg-gradient-to-br from-dami-100 via-[#F2E4E0] to-dami-200 dark:from-dami-800 dark:via-dami-900 dark:to-dami-900" />
           {/* Centered content */}
           <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
             <p className="mb-4 text-[9px] font-medium uppercase tracking-[0.45em] text-dami-400 dark:text-dami-500">

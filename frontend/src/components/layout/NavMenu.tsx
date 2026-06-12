@@ -49,12 +49,12 @@ export function NavMenu({ open, onClose }: NavMenuProps) {
         onClick={onClose}
       />
 
-      <div className="fixed left-0 top-0 z-[100] flex h-dvh w-72 flex-col bg-white shadow-2xl dark:bg-[#141012] dark:shadow-[0_0_40px_rgba(0,0,0,0.6)] md:w-80">
-        <div className="flex shrink-0 items-center justify-between border-b border-gray-200 px-6 py-4 dark:border-dami-800">
+      <div className="fixed left-0 top-0 z-[100] flex h-dvh w-72 flex-col bg-[#FDFAF9] shadow-2xl dark:bg-[#1A0F0E] dark:shadow-[0_0_40px_rgba(0,0,0,0.6)] md:w-80">
+        <div className="flex shrink-0 items-center justify-between border-b border-dami-200 px-6 py-4 dark:border-dami-800">
           <Link
             href="/"
             onClick={onClose}
-            className="text-[12px] font-bold uppercase tracking-[0.2em] text-gray-900 dark:text-white"
+            className="text-[12px] font-bold uppercase tracking-[0.2em] text-dami-800 dark:text-white"
           >
             DAMI BEAUTY
           </Link>
@@ -62,7 +62,7 @@ export function NavMenu({ open, onClose }: NavMenuProps) {
             type="button"
             onClick={onClose}
             aria-label="Kapat"
-            className="text-gray-500 transition-colors hover:text-gray-900 dark:text-dami-400 dark:hover:text-white"
+            className="text-dami-400 transition-colors hover:text-dami-800 dark:text-dami-500 dark:hover:text-white"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -74,12 +74,12 @@ export function NavMenu({ open, onClose }: NavMenuProps) {
           <div className="space-y-6 pb-4">
             {SECTIONS.map((section) => (
               <div key={section.title}>
-                <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-gray-400 dark:text-dami-500">
+                <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-dami-400 dark:text-dami-500">
                   {section.title}
                 </p>
 
                 {section.comingSoon ? (
-                  <p className="text-[12px] font-medium text-gray-400 dark:text-dami-500">Yakında</p>
+                  <p className="text-[12px] font-medium text-dami-300 dark:text-dami-500">Yakında</p>
                 ) : (
                   <ul className="space-y-0.5">
                     {section.items.map((item) => (
@@ -101,8 +101,8 @@ export function NavMenu({ open, onClose }: NavMenuProps) {
           </div>
         </nav>
 
-        <div className="shrink-0 border-t border-gray-200 px-6 py-3 dark:border-dami-800">
-          <p className="text-[10px] uppercase tracking-widest text-gray-400 dark:text-dami-500">
+        <div className="shrink-0 border-t border-dami-200 px-6 py-3 dark:border-dami-800">
+          <p className="text-[10px] uppercase tracking-widest text-dami-400 dark:text-dami-500">
             © {new Date().getFullYear()} Dami Beauty
           </p>
         </div>

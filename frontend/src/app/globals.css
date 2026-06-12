@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --background: #FFFFFF;
-  --foreground: #1A1A1A;
+  --background: #FDFAF9;       /* warm blush white */
+  --foreground: #2A1412;       /* dark rose-tinted text */
   --surface: #FFFFFF;
-  --surface-muted: #F5F5F5;
-  --border: #E5E5E5;
-  --border-subtle: rgba(0, 0, 0, 0.06);
+  --surface-muted: #F7EFED;    /* light blush surface */
+  --border: #EDE0DC;           /* soft pink-gray border */
+  --border-subtle: rgba(42, 20, 18, 0.07);
 }
 
 .dark {
-  --background: #111111;
-  --foreground: #F2F2F2;
-  --surface: #1A1A1A;
-  --surface-muted: #222222;
-  --border: #2E2E2E;
-  --border-subtle: rgba(255, 255, 255, 0.07);
+  --background: #1A0F0E;
+  --foreground: #F7EFED;
+  --surface: #2A1412;
+  --surface-muted: #3A1F1D;
+  --border: #4A2422;
+  --border-subtle: rgba(247, 239, 237, 0.08);
 }
 
 html {
@@ -34,18 +34,18 @@ body {
 }
 
 @layer components {
-  /* Primary: solid black CTA — hince style */
+  /* Primary: dark rose fill */
   .btn-primary {
-    @apply inline-flex items-center justify-center bg-dami-900 px-6 py-2.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white transition-all duration-200 hover:bg-dami-800 active:scale-[0.98] disabled:opacity-40 dark:bg-white dark:text-dami-900 dark:hover:bg-dami-100;
+    @apply inline-flex items-center justify-center bg-dami-800 px-6 py-2.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white transition-all duration-200 hover:bg-dami-900 active:scale-[0.98] disabled:opacity-40 dark:bg-dami-300 dark:text-dami-900 dark:hover:bg-dami-200;
   }
 
-  /* Secondary: outlined black */
+  /* Secondary: outlined dark rose */
   .btn-secondary {
-    @apply inline-flex items-center justify-center border border-dami-900 bg-transparent px-6 py-2.5 text-[11px] font-medium uppercase tracking-[0.2em] text-dami-900 transition-all duration-200 hover:bg-dami-900 hover:text-white active:scale-[0.98] dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-dami-900;
+    @apply inline-flex items-center justify-center border border-dami-800 bg-transparent px-6 py-2.5 text-[11px] font-medium uppercase tracking-[0.2em] text-dami-800 transition-all duration-200 hover:bg-dami-800 hover:text-white active:scale-[0.98] dark:border-dami-300 dark:text-dami-200 dark:hover:bg-dami-700 dark:hover:text-white;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center gap-1 text-[10px] font-medium uppercase tracking-[0.2em] text-dami-400 underline-offset-4 hover:text-dami-900 hover:underline transition-colors dark:text-dami-500 dark:hover:text-dami-100;
+    @apply inline-flex items-center gap-1 text-[10px] font-medium uppercase tracking-[0.2em] text-dami-400 underline-offset-4 hover:text-dami-800 hover:underline transition-colors dark:text-dami-500 dark:hover:text-dami-100;
   }
 
   .card {
@@ -53,7 +53,7 @@ body {
   }
 
   .input-field {
-    @apply w-full border-b border-[var(--border)] bg-transparent px-0 py-2.5 text-sm text-[var(--foreground)] outline-none transition placeholder:text-dami-300 focus:border-dami-900 dark:placeholder:text-dami-600 dark:focus:border-dami-300;
+    @apply w-full border-b border-[var(--border)] bg-transparent px-0 py-2.5 text-sm text-[var(--foreground)] outline-none transition placeholder:text-dami-300 focus:border-dami-700 dark:placeholder:text-dami-600 dark:focus:border-dami-400;
   }
 
   .section-title {
@@ -80,17 +80,15 @@ body {
 
 .nav-menu-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #E5E5E5 transparent;
+  scrollbar-color: #EDE0DC transparent;
 }
-
 .dark .nav-menu-scroll {
-  scrollbar-color: #2E2E2E transparent;
+  scrollbar-color: #4A2422 transparent;
 }
-
 .nav-menu-scroll::-webkit-scrollbar { width: 4px; }
 .nav-menu-scroll::-webkit-scrollbar-track { background: transparent; }
 .nav-menu-scroll::-webkit-scrollbar-thumb {
-  background-color: #E5E5E5;
+  background-color: #EDE0DC;
   border-radius: 9999px;
 }
-.dark .nav-menu-scroll::-webkit-scrollbar-thumb { background-color: #2E2E2E; }
+.dark .nav-menu-scroll::-webkit-scrollbar-thumb { background-color: #4A2422; }

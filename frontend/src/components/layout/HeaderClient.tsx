@@ -20,7 +20,7 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
         <button
           type="button"
           onClick={() => setMenuOpen(true)}
-          className="group flex items-center gap-2.5 text-dami-500 transition-colors hover:text-dami-900 dark:text-dami-400 dark:hover:text-white"
+          className="group flex items-center gap-2.5 text-dami-400 transition-colors hover:text-dami-800 dark:text-dami-400 dark:hover:text-white"
           aria-label="Menüyü aç"
         >
           <span className="relative flex h-4 w-4 flex-col justify-center">
@@ -44,7 +44,7 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
           <ThemeToggle />
           <Link
             href="/cart"
-            className="relative flex items-center gap-1 text-dami-500 transition-colors hover:text-dami-900 dark:text-dami-400 dark:hover:text-white"
+            className="relative flex items-center gap-1 text-dami-400 transition-colors hover:text-dami-800 dark:text-dami-400 dark:hover:text-white"
             aria-label="Sepet"
           >
             <svg

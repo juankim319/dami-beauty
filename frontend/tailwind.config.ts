@@ -10,24 +10,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Pure neutral gray — exactly hince.co.kr color system
+        // Blush / dusty-rose palette — hince.co.kr signature tone
         dami: {
-          50:  "#FFFFFF",   // pure white
-          100: "#F5F5F5",   // page background / light surface
-          200: "#E5E5E5",   // borders / dividers
-          300: "#C4C4C4",   // placeholder / muted elements
-          400: "#9B9B9B",   // secondary text
-          500: "#767676",   // body text (lighter)
-          600: "#4A4A4A",   // body text
-          700: "#333333",   // primary text
-          800: "#1A1A1A",   // headings / dark surfaces
-          900: "#0D0D0D",   // near-black (footer, emphasis)
+          50:  "#FDFAF9",   // warm blush white — page background
+          100: "#F7EFED",   // very light blush surface
+          200: "#EDE0DC",   // soft pink-gray border
+          300: "#D9C4BF",   // muted rose / placeholder
+          400: "#C4A09A",   // secondary text / soft rose
+          500: "#A67C76",   // medium rose body text
+          600: "#8A5E59",   // deeper rose
+          700: "#6B3F3C",   // primary text (dark rose)
+          800: "#4A2422",   // headings
+          900: "#2A1412",   // near-black with rose undertone (footer)
         },
-        // Brand accent — used only for small highlights (cart badge, etc.)
+        // Direct brand accent (same rose family, bolder)
         brand: {
-          DEFAULT: "#8B1A4A",
-          light:   "#F5D0DE",
-          muted:   "#D48BA3",
+          DEFAULT: "#C4706A",
+          light:   "#F7EFED",
+          muted:   "#D9C4BF",
         },
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -42,8 +42,8 @@ const config: Config = {
         dami: "0px",
       },
       boxShadow: {
-        soft: "0 8px 40px rgba(0, 0, 0, 0.08)",
-        card: "0 2px 12px rgba(0, 0, 0, 0.05)",
+        soft: "0 8px 40px rgba(42, 20, 18, 0.08)",
+        card: "0 2px 12px rgba(42, 20, 18, 0.05)",
       },
       transitionTimingFunction: {
         smooth: "cubic-bezier(0.25, 0.1, 0.25, 1)",

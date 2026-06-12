@@ -12,10 +12,10 @@ import {
 const t = getMessages();
 
 const LEGAL_LINKS = [
-  { href: "/legal/gizlilik",      label: t.legal.footerPrivacy  },
+  { href: "/legal/gizlilik",       label: t.legal.footerPrivacy  },
   { href: "/legal/mesafeli-satis", label: t.legal.footerDistance },
-  { href: "/legal/iade-degisim",  label: t.legal.footerReturns  },
-  { href: "/legal/cerez",         label: t.legal.footerCookies  },
+  { href: "/legal/iade-degisim",   label: t.legal.footerReturns  },
+  { href: "/legal/cerez",          label: t.legal.footerCookies  },
 ];
 
 function IconPhone({ className }: { className?: string }) {
@@ -47,32 +47,34 @@ function IconInstagram({ className }: { className?: string }) {
 
 export function Footer() {
   return (
-    <footer className="border-t border-dami-800 bg-dami-900">
-      <div className="mx-auto max-w-7xl px-5 py-10">
+    <footer className="border-t border-dami-200 bg-dami-900 dark:border-dami-700">
+      <div className="mx-auto max-w-7xl px-5 py-12">
         <div className="grid gap-8 md:grid-cols-4">
+          {/* Brand */}
           <div className="md:col-span-2">
-            <Link href="/" className="text-[13px] font-semibold uppercase tracking-[0.15em] text-white">
+            <Link href="/" className="text-[13px] font-semibold uppercase tracking-[0.2em] text-white">
               {t.brand.name}
             </Link>
-            <p className="mt-2 max-w-xs text-xs leading-relaxed text-dami-200/60">
+            <p className="mt-3 max-w-xs text-[11px] leading-relaxed text-dami-400">
               {t.brand.tagline}
             </p>
-            <div className="mt-4 space-y-1 text-[10px] leading-relaxed text-dami-300/70">
+            <div className="mt-5 space-y-1.5 text-[10px] leading-relaxed text-dami-500">
               <p><span className="text-dami-400">Unvan:</span> {SELLER_NAME}</p>
               <p><span className="text-dami-400">VKN:</span> {SELLER_VKN}</p>
               <p><span className="text-dami-400">Adres:</span> {CONTACT_ADDRESS}</p>
             </div>
           </div>
 
+          {/* Contact */}
           <div>
-            <p className="text-[10px] font-medium uppercase tracking-wide text-dami-400">{t.footer.contact}</p>
-            <ul className="mt-3 space-y-2.5 text-xs text-dami-100/75">
+            <p className="text-[10px] font-medium uppercase tracking-widest text-dami-500">{t.footer.contact}</p>
+            <ul className="mt-4 space-y-3 text-xs text-dami-400">
               <li>
                 <a
                   href={`tel:+${CONTACT_PHONE_RAW}`}
-                  className="group flex items-center gap-2.5 underline-offset-4 hover:text-white hover:underline"
+                  className="group flex items-center gap-2.5 underline-offset-4 hover:text-white hover:underline transition-colors"
                 >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-dami-700/80 text-dami-300 transition-colors group-hover:border-dami-500 group-hover:text-white">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-dami-700 text-dami-500 transition-colors group-hover:border-dami-500 group-hover:text-white">
                     <IconPhone className="h-3.5 w-3.5" />
                   </span>
                   {CONTACT_PHONE_DISPLAY}
@@ -81,9 +83,9 @@ export function Footer() {
               <li>
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className="group flex items-start gap-2.5 break-all underline-offset-4 hover:text-white hover:underline"
+                  className="group flex items-start gap-2.5 break-all underline-offset-4 hover:text-white hover:underline transition-colors"
                 >
-                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-dami-700/80 text-dami-300 transition-colors group-hover:border-dami-500 group-hover:text-white">
+                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-dami-700 text-dami-500 transition-colors group-hover:border-dami-500 group-hover:text-white">
                     <IconMail className="h-3.5 w-3.5" />
                   </span>
                   {CONTACT_EMAIL}
@@ -94,9 +96,9 @@ export function Footer() {
                   href="https://www.instagram.com/damibeautyy/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-2.5 underline-offset-4 hover:text-white hover:underline"
+                  className="group flex items-center gap-2.5 underline-offset-4 hover:text-white hover:underline transition-colors"
                 >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-dami-700/80 text-dami-300 transition-colors group-hover:border-dami-500 group-hover:text-white">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-dami-700 text-dami-500 transition-colors group-hover:border-dami-500 group-hover:text-white">
                     <IconInstagram className="h-3.5 w-3.5" />
                   </span>
                   @damibeautyy
@@ -104,29 +106,31 @@ export function Footer() {
               </li>
             </ul>
           </div>
+
+          {/* Links */}
           <div>
-            <p className="text-[10px] font-medium uppercase tracking-wide text-dami-400">{t.nav.explore}</p>
-            <ul className="mt-3 space-y-1.5 text-xs text-dami-100/75">
+            <p className="text-[10px] font-medium uppercase tracking-widest text-dami-500">{t.nav.explore}</p>
+            <ul className="mt-4 space-y-2 text-xs text-dami-400">
               <li>
-                <Link href="/products" className="underline-offset-4 hover:text-white hover:underline">{t.nav.products}</Link>
+                <Link href="/products" className="underline-offset-4 hover:text-white hover:underline transition-colors">{t.nav.products}</Link>
               </li>
               <li>
-                <Link href="/story" className="underline-offset-4 hover:text-white hover:underline">{t.nav.story}</Link>
+                <Link href="/story" className="underline-offset-4 hover:text-white hover:underline transition-colors">{t.nav.story}</Link>
               </li>
             </ul>
-            <p className="mt-5 text-[10px] font-medium uppercase tracking-wide text-dami-400">{t.legal.footerLegal}</p>
-            <ul className="mt-3 space-y-1.5 text-xs text-dami-100/75">
+            <p className="mt-6 text-[10px] font-medium uppercase tracking-widest text-dami-500">{t.legal.footerLegal}</p>
+            <ul className="mt-4 space-y-2 text-xs text-dami-400">
               {LEGAL_LINKS.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="underline-offset-4 hover:text-white hover:underline">{l.label}</Link>
+                  <Link href={l.href} className="underline-offset-4 hover:text-white hover:underline transition-colors">{l.label}</Link>
                 </li>
               ))}
             </ul>
           </div>
         </div>
 
-        <div className="mt-8 border-t border-dami-800 pt-5 text-center">
-          <p className="text-[10px] text-dami-500">{t.footer.rights(new Date().getFullYear())}</p>
+        <div className="mt-10 border-t border-dami-800 pt-6 text-center">
+          <p className="text-[10px] text-dami-600">{t.footer.rights(new Date().getFullYear())}</p>
         </div>
       </div>
     </footer>

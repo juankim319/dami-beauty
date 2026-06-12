@@ -15,7 +15,7 @@ interface AuthContextValue {
   isAdmin: boolean;
   loading: boolean;
   configError: string | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
 }
 
@@ -54,7 +54,14 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const auth = getFirebaseAuth();
-    await signInWithEmailAndPassword(auth, email, password);
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    // Force refresh so newly set custom claims (role=admin) are picked up immediately.
+    await credential.user.getIdToken(true);
+    const result = await credential.user.getIdTokenResult();
+    const admin = result.claims.role === "admin";
+    setToken(await credential.user.getIdToken());
+    setIsAdmin(admin);
+    return admin;
   };
 
   const logout = async () => {

@@ -11,7 +11,7 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
   const { itemCount } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  void cartOnly; // unused prop kept for backwards compat
+  void cartOnly;
 
   return (
     <>
@@ -20,7 +20,7 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
         <button
           type="button"
           onClick={() => setMenuOpen(true)}
-          className="group flex items-center gap-2.5 text-dami-100/70 transition-colors hover:text-white"
+          className="group flex items-center gap-2.5 text-dami-500 transition-colors hover:text-dami-900 dark:text-dami-400 dark:hover:text-white"
           aria-label="Menüyü aç"
         >
           <span className="relative flex h-4 w-4 flex-col justify-center">
@@ -33,7 +33,7 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
         {/* Center: brand name */}
         <Link
           href="/"
-          className="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold uppercase tracking-[0.15em] text-white"
+          className="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold uppercase tracking-[0.15em] text-dami-900 dark:text-white"
         >
           DAMI BEAUTY
         </Link>
@@ -43,34 +43,33 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
           <HeaderSearch />
           <ThemeToggle />
           <Link
-          href="/cart"
-          className="relative flex items-center gap-1 text-dami-100/75 transition-colors hover:text-white"
-          aria-label="Sepet"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-[18px] w-[18px]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.5}
+            href="/cart"
+            className="relative flex items-center gap-1 text-dami-500 transition-colors hover:text-dami-900 dark:text-dami-400 dark:hover:text-white"
+            aria-label="Sepet"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-            />
-          </svg>
-          {itemCount > 0 && (
-            <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-dami-300 px-1 text-[10px] font-medium text-dami-900">
-              {itemCount}
-            </span>
-          )}
-        </Link>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[18px] w-[18px]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+              />
+            </svg>
+            {itemCount > 0 && (
+              <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-brand px-1 text-[10px] font-medium text-white">
+                {itemCount}
+              </span>
+            )}
+          </Link>
         </div>
       </div>
 
-      {/* Nav side menu */}
       <NavMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
     </>
   );

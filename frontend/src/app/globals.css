@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --background: #FDF2F6;
-  --foreground: #4A0E23;
-  --surface: #ffffff;
-  --surface-muted: #FCE7EF;
-  --border: #F5D0DE;
-  --border-subtle: rgba(131, 24, 67, 0.12);
+  --background: #FAFAF8;
+  --foreground: #1A1916;
+  --surface: #FFFFFF;
+  --surface-muted: #F4F3F0;
+  --border: #E5E3DE;
+  --border-subtle: rgba(26, 25, 22, 0.08);
 }
 
 .dark {
-  --background: #0a0809;
-  --foreground: #f2e8ec;
-  --surface: #141012;
-  --surface-muted: #1c1518;
-  --border: #3d1824;
-  --border-subtle: rgba(190, 24, 93, 0.18);
+  --background: #0F0E0C;
+  --foreground: #F4F3F0;
+  --surface: #1A1916;
+  --surface-muted: #2D2B26;
+  --border: #2D2B26;
+  --border-subtle: rgba(228, 227, 222, 0.10);
 }
 
 html {
@@ -34,16 +34,18 @@ body {
 }
 
 @layer components {
+  /* Primary: dark charcoal fill — like hince's black CTA */
   .btn-primary {
-    @apply inline-flex items-center justify-center border border-dami-700 bg-dami-700 px-6 py-2.5 text-[11px] font-medium uppercase tracking-wide text-white transition-all duration-200 hover:bg-dami-800 hover:border-dami-800 active:scale-[0.98] disabled:opacity-40 dark:border-dami-500 dark:bg-dami-600 dark:hover:border-dami-400 dark:hover:bg-dami-500;
+    @apply inline-flex items-center justify-center bg-dami-800 px-6 py-2.5 text-[11px] font-medium uppercase tracking-widest text-white transition-all duration-200 hover:bg-dami-900 active:scale-[0.98] disabled:opacity-40 dark:bg-dami-700 dark:hover:bg-dami-800;
   }
 
+  /* Secondary: outlined dark */
   .btn-secondary {
-    @apply inline-flex items-center justify-center border border-dami-700 bg-transparent px-6 py-2.5 text-[11px] font-medium uppercase tracking-wide text-dami-700 transition-all duration-200 hover:bg-dami-700 hover:text-white active:scale-[0.98] dark:border-dami-400 dark:text-dami-200 dark:hover:bg-dami-700 dark:hover:text-white;
+    @apply inline-flex items-center justify-center border border-dami-700 bg-transparent px-6 py-2.5 text-[11px] font-medium uppercase tracking-widest text-dami-700 transition-all duration-200 hover:bg-dami-800 hover:border-dami-800 hover:text-white active:scale-[0.98] dark:border-dami-300 dark:text-dami-200 dark:hover:bg-dami-700 dark:hover:border-dami-700 dark:hover:text-white;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-wide text-dami-600 underline-offset-4 hover:text-dami-800 hover:underline transition-colors dark:text-dami-300 dark:hover:text-dami-100;
+    @apply inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-widest text-dami-500 underline-offset-4 hover:text-dami-800 hover:underline transition-colors dark:text-dami-400 dark:hover:text-dami-100;
   }
 
   .card {
@@ -51,15 +53,15 @@ body {
   }
 
   .input-field {
-    @apply w-full border-b border-[var(--border)] bg-transparent px-0 py-2.5 text-sm text-[var(--foreground)] outline-none transition placeholder:text-dami-400 focus:border-dami-700 dark:placeholder:text-dami-600 dark:focus:border-dami-400;
+    @apply w-full border-b border-[var(--border)] bg-transparent px-0 py-2.5 text-sm text-[var(--foreground)] outline-none transition placeholder:text-dami-300 focus:border-dami-700 dark:placeholder:text-dami-600 dark:focus:border-dami-400;
   }
 
   .section-title {
-    @apply text-base font-medium text-dami-800 md:text-lg dark:text-dami-100;
+    @apply text-base font-medium tracking-wide text-dami-800 md:text-lg dark:text-dami-100;
   }
 
   .section-label {
-    @apply text-[10px] font-medium uppercase tracking-wide text-dami-500 dark:text-dami-400;
+    @apply text-[10px] font-medium uppercase tracking-widest text-dami-400 dark:text-dami-500;
   }
 
   .divider {
@@ -78,11 +80,11 @@ body {
 
 .nav-menu-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #d1d5db transparent;
+  scrollbar-color: #E5E3DE transparent;
 }
 
 .dark .nav-menu-scroll {
-  scrollbar-color: #4a2030 transparent;
+  scrollbar-color: #2D2B26 transparent;
 }
 
 .nav-menu-scroll::-webkit-scrollbar {
@@ -94,18 +96,18 @@ body {
 }
 
 .nav-menu-scroll::-webkit-scrollbar-thumb {
-  background-color: #d1d5db;
+  background-color: #E5E3DE;
   border-radius: 9999px;
 }
 
 .dark .nav-menu-scroll::-webkit-scrollbar-thumb {
-  background-color: #4a2030;
+  background-color: #2D2B26;
 }
 
 .nav-menu-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: #9ca3af;
+  background-color: #C8C5BC;
 }
 
 .dark .nav-menu-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: #6b3045;
+  background-color: #4A4740;
 }

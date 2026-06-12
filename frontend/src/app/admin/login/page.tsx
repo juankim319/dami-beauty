@@ -21,7 +21,11 @@ export default function AdminLoginPage() {
     setError("");
     setSubmitting(true);
     try {
-      await login(email, password);
+      const admin = await login(email, password);
+      if (!admin) {
+        setError("Bu hesabın yönetici yetkisi yok.");
+        return;
+      }
       router.push("/admin");
     } catch {
       setError("Giriş başarısız. E-posta veya şifre hatalı.");

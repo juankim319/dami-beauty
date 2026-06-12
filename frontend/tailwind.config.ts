@@ -10,17 +10,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Warm neutral palette — white base, charcoal dark (hince-inspired)
         dami: {
-          50:  "#FDF2F6",
-          100: "#FCE7EF",
-          200: "#F5D0DE",
-          300: "#E8A8BE",
-          400: "#C4617A",
-          500: "#BE185D",
-          600: "#9D174D",
-          700: "#831843",
-          800: "#701A37",
-          900: "#4A0E23",
+          50:  "#FAFAF8",   // warm white — page background
+          100: "#F4F3F0",   // very light warm surface
+          200: "#E5E3DE",   // borders / dividers
+          300: "#C8C5BC",   // muted / placeholder
+          400: "#8F8C84",   // secondary text
+          500: "#6B6860",   // body text (lighter)
+          600: "#4A4740",   // body text
+          700: "#2D2B26",   // primary text / dark button
+          800: "#1A1916",   // headings
+          900: "#0F0E0C",   // near-black (footer, dark surfaces)
+        },
+        // Brand accent — burgundy used only for small highlights
+        brand: {
+          DEFAULT: "#8B1A4A",
+          light:   "#F5D0DE",
+          muted:   "#D48BA3",
         },
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -35,8 +42,8 @@ const config: Config = {
         dami: "2px",
       },
       boxShadow: {
-        soft: "0 8px 40px rgba(131, 24, 67, 0.15)",
-        card: "0 2px 12px rgba(74, 14, 35, 0.08)",
+        soft: "0 8px 40px rgba(26, 25, 22, 0.10)",
+        card: "0 2px 12px rgba(15, 14, 12, 0.06)",
       },
       transitionTimingFunction: {
         smooth: "cubic-bezier(0.25, 0.1, 0.25, 1)",

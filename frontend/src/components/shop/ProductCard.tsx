@@ -14,7 +14,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link href={`/products/${product.slug}`} className="group block">
       {/* Image */}
-      <div className="product-img-wrap relative aspect-[3/4] overflow-hidden bg-dami-100 dark:bg-dami-900/50">
+      <div className="product-img-wrap relative aspect-[3/4] overflow-hidden bg-dami-100 dark:bg-dami-800">
         {image ? (
           <Image
             src={image}
@@ -24,18 +24,18 @@ export function ProductCard({ product }: ProductCardProps) {
             sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw"
           />
         ) : (
-          <div className="flex h-full items-center justify-center bg-gradient-to-br from-dami-100 to-dami-200">
-            <span className="text-xs text-dami-300">—</span>
+          <div className="flex h-full items-center justify-center bg-gradient-to-br from-dami-100 to-dami-200 dark:from-dami-700 dark:to-dami-800">
+            <span className="text-xs text-dami-300 dark:text-dami-600">—</span>
           </div>
         )}
       </div>
 
       {/* Info */}
-      <div className="mt-3 space-y-0.5">
-        <h3 className="text-xs font-medium uppercase tracking-wide text-dami-700 line-clamp-2 transition-colors group-hover:text-dami-900 dark:text-dami-200 dark:group-hover:text-white">
+      <div className="mt-3 space-y-1">
+        <h3 className="text-[12px] font-medium tracking-wide text-dami-700 line-clamp-2 transition-colors group-hover:text-dami-900 dark:text-dami-200 dark:group-hover:text-white">
           {product.name_tr}
         </h3>
-        <p className="text-xs text-dami-500 dark:text-dami-400">{formatTRY(price)}</p>
+        <p className="text-[12px] text-dami-400 dark:text-dami-500">{formatTRY(price)}</p>
       </div>
     </Link>
   );

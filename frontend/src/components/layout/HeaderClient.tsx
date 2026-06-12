@@ -4,13 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 import { NavMenu } from "./NavMenu";
-import { ThemeToggle } from "./ThemeToggle";
 import { HeaderSearch } from "./HeaderSearch";
 import { getMessages } from "@/lib/i18n";
 
-/** Unified header control color — visible on blush-white background */
 const HEADER_CTRL =
-  "text-dami-700 transition-colors hover:text-dami-900 dark:text-dami-300 dark:hover:text-white";
+  "text-dami-700 transition-colors hover:text-dami-900";
 
 export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
   const t = getMessages();
@@ -21,12 +19,12 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
 
   return (
     <>
-      <div className="mx-auto flex h-12 w-full max-w-7xl items-center justify-between px-5 md:h-14">
+      <div className="mx-auto flex h-12 w-full max-w-7xl items-center gap-4 px-5 md:h-14">
         {/* Left: menu */}
         <button
           type="button"
           onClick={() => setMenuOpen(true)}
-          className={`group flex items-center gap-2.5 ${HEADER_CTRL}`}
+          className={`group flex shrink-0 items-center gap-2.5 ${HEADER_CTRL}`}
           aria-label={t.nav.menu}
         >
           <span className="relative flex h-4 w-4 flex-col justify-center">
@@ -38,21 +36,20 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
           </span>
         </button>
 
-        {/* Center: brand name */}
+        {/* Center: brand */}
         <Link
           href="/"
-          className="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold uppercase tracking-[0.18em] text-dami-900 dark:text-white"
+          className="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold uppercase tracking-[0.18em] text-dami-900"
         >
           {t.brand.name}
         </Link>
 
-        {/* Right: search + theme + cart */}
-        <div className="flex items-center gap-3 md:gap-4">
+        {/* Right: search (expanded) + cart */}
+        <div className="ml-auto flex min-w-0 flex-1 items-center justify-end gap-3 sm:max-w-md md:gap-4">
           <HeaderSearch />
-          <ThemeToggle />
           <Link
             href="/cart"
-            className={`relative flex items-center gap-1 ${HEADER_CTRL}`}
+            className={`relative shrink-0 ${HEADER_CTRL}`}
             aria-label={t.nav.cart}
           >
             <svg
@@ -70,7 +67,7 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
               />
             </svg>
             {itemCount > 0 && (
-              <span className="absolute -right-1.5 -top-1.5 flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-dami-900 px-1 text-[9px] font-medium text-white dark:bg-white dark:text-dami-900">
+              <span className="absolute -right-1.5 -top-1.5 flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-brand px-1 text-[9px] font-medium text-white">
                 {itemCount}
               </span>
             )}

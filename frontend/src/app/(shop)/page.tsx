@@ -28,11 +28,13 @@ async function getHomeData() {
 
 function SectionHeading({ title, href }: { title: string; href: string }) {
   return (
-    <div className="mb-7 flex items-baseline justify-between border-b border-dami-200 pb-4 dark:border-dami-700">
-      <h2 className="section-title">{title}</h2>
+    <div className="mb-8 flex items-end justify-between">
+      <h2 className="text-[11px] font-medium uppercase tracking-[0.35em] text-dami-800">
+        {title}
+      </h2>
       <Link
         href={href}
-        className="text-[10px] font-medium uppercase tracking-[0.2em] text-dami-400 transition-colors hover:text-dami-900 dark:text-dami-500 dark:hover:text-white"
+        className="text-[10px] font-medium uppercase tracking-[0.2em] text-dami-400 transition-colors hover:text-dami-800"
       >
         {t.home.viewAllPlus}
       </Link>
@@ -48,7 +50,7 @@ export default async function HomePage() {
       <HeroCampaign campaign={campaign} />
 
       {featured.length > 0 && (
-        <section className="px-5 py-14 md:px-10 md:py-16">
+        <section className="px-6 py-16 md:px-10 md:py-20">
           <SectionHeading title={t.home.bestSellerSection} href="/products?featured=true" />
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-7 md:gap-y-12">
             {featured.slice(0, 8).map((p) => (
@@ -59,7 +61,7 @@ export default async function HomePage() {
       )}
 
       {newArrivals.length > 0 && (
-        <section className="border-t border-dami-200 px-5 py-14 dark:border-dami-700 md:px-10 md:py-16">
+        <section className="border-t border-dami-100 px-6 py-16 md:px-10 md:py-20">
           <SectionHeading title={t.home.newArrivals} href="/products" />
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-7 md:gap-y-12">
             {newArrivals.slice(0, 8).map((p) => (
@@ -80,10 +82,8 @@ export default async function HomePage() {
       )}
 
       {instagram.length > 0 && (
-        <section className="border-t border-dami-200 dark:border-dami-700">
-          <div className="px-5 md:px-10">
-            <InstagramGrid posts={instagram} />
-          </div>
+        <section className="border-t border-dami-100 px-6 py-12 md:px-10">
+          <InstagramGrid posts={instagram} />
         </section>
       )}
     </>

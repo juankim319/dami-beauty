@@ -38,19 +38,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#2a1219",
+  themeColor: "#FDFAF9",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('dami-theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');}catch(e){}})();`,
-          }}
-        />
-      </head>
+    <html lang="tr">
       <body className={`${inter.variable} min-h-dvh font-sans text-sm antialiased`}>
         {children}
       </body>

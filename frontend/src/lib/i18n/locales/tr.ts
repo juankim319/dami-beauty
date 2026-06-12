@@ -43,9 +43,9 @@ export const tr = {
   home: {
     featuredSets: "Öne Çıkan Setler",
     bestSeller: "Çok Satanlar",
-    bestSellerSection: "ÇOK SATANLAR",
-    newArrivals: "YENİ ÜRÜNLER",
-    newCollection: "YENİ KOLEKSİYON",
+    bestSellerSection: "BEST SELLER",
+    newArrivals: "NEW ARRIVALS",
+    newCollection: "NEW COLLECTION",
     scrollHint: "kaydır",
     viewAllPlus: "Tümünü Gör +",
     comingSoon: "Yakında yeni setler eklenecek.",

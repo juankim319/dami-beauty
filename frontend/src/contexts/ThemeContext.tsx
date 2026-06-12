@@ -1,62 +1,26 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-
-type Theme = "light" | "dark";
-
-const STORAGE_KEY = "dami-theme";
+import { createContext, useContext, useEffect } from "react";
 
 interface ThemeContextValue {
-  theme: Theme;
-  toggleTheme: () => void;
+  theme: "light";
 }
 
-const ThemeContext = createContext<ThemeContextValue>({
-  theme: "light",
-  toggleTheme: () => {},
-});
+const ThemeContext = createContext<ThemeContextValue>({ theme: "light" });
 
-function resolveTheme(): Theme {
-  if (typeof window === "undefined") return "light";
-  const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-  if (stored === "light" || stored === "dark") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
-
-function applyTheme(theme: Theme) {
-  document.documentElement.classList.toggle("dark", theme === "dark");
-}
-
+/** Shop is light-only; removes any persisted dark class on load. */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
-
   useEffect(() => {
-    const initial = resolveTheme();
-    setTheme(initial);
-    applyTheme(initial);
-
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = () => {
-      if (localStorage.getItem(STORAGE_KEY)) return;
-      const next = mq.matches ? "dark" : "light";
-      setTheme(next);
-      applyTheme(next);
-    };
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-
-  const toggleTheme = useCallback(() => {
-    setTheme((prev) => {
-      const next: Theme = prev === "dark" ? "light" : "dark";
-      localStorage.setItem(STORAGE_KEY, next);
-      applyTheme(next);
-      return next;
-    });
+    document.documentElement.classList.remove("dark");
+    try {
+      localStorage.setItem("dami-theme", "light");
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme: "light" }}>
       {children}
     </ThemeContext.Provider>
   );

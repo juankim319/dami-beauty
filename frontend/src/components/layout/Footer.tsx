@@ -58,9 +58,9 @@ export function Footer() {
               {t.brand.tagline}
             </p>
             <div className="mt-5 space-y-1.5 text-[10px] leading-relaxed text-dami-600">
-              <p><span className="text-dami-500">Unvan:</span> {SELLER_NAME}</p>
-              <p><span className="text-dami-500">VKN:</span> {SELLER_VKN}</p>
-              <p><span className="text-dami-500">Adres:</span> {CONTACT_ADDRESS}</p>
+              <p><span className="text-dami-500">{t.footer.unvan}:</span> {SELLER_NAME}</p>
+              <p><span className="text-dami-500">{t.footer.vkn}:</span> {SELLER_VKN}</p>
+              <p><span className="text-dami-500">{t.footer.address}:</span> {CONTACT_ADDRESS}</p>
             </div>
           </div>
 
@@ -125,7 +125,7 @@ export function Footer() {
 
         <div className="mt-12 border-t border-dami-800 pt-6 text-center">
           <p className="text-[9px] uppercase tracking-[0.25em] text-dami-700">
-            © {new Date().getFullYear()} {t.brand.name}. All rights reserved.
+            {t.footer.rights(new Date().getFullYear())}
           </p>
         </div>
       </div>

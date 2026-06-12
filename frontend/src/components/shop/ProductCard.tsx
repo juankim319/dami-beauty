@@ -2,12 +2,14 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Product } from "@/types";
 import { formatTRY, productMinPrice } from "@/lib/format";
+import { getMessages } from "@/lib/i18n";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const t = getMessages();
   const price = productMinPrice(product);
   const image = product.images[0];
   const isNew = !product.is_featured;
@@ -32,7 +34,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* NEW badge — top-left, like hince "N" tag */}
         {isNew && (
           <span className="absolute left-2.5 top-2.5 bg-dami-900 px-2 py-0.5 text-[9px] font-medium uppercase tracking-widest text-white dark:bg-white dark:text-dami-900">
-            NEW
+            {t.products.newBadge}
           </span>
         )}
       </div>

@@ -13,7 +13,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       aria-label={isDark ? t.theme.switchLight : t.theme.switchDark}
-      className="flex h-8 w-8 items-center justify-center rounded-full text-dami-100/70 transition-colors hover:bg-white/10 hover:text-white"
+      className="flex h-8 w-8 items-center justify-center rounded-full text-dami-700 transition-colors hover:bg-dami-100 hover:text-dami-900 dark:text-dami-300 dark:hover:bg-white/10 dark:hover:text-white"
     >
       {isDark ? (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-[17px] w-[17px]" aria-hidden>

@@ -1,45 +1,48 @@
 "use client";
 
 import Link from "next/link";
+import { getMessages } from "@/lib/i18n";
 
 interface NavMenuProps {
   open: boolean;
   onClose: () => void;
 }
 
-const SECTIONS = [
-  {
-    title: "ABOUT",
-    items: [
-      { label: "BRAND STORY", href: "/story" },
-      { label: "LOOK",        href: "/look" },
-    ],
-  },
-  {
-    title: "SHOP",
-    items: [
-      { label: "ALL",         href: "/products" },
-      { label: "GIFT BOX",    href: "/products?type=gift_box" },
-      { label: "SET",         href: "/products?type=curation_set" },
-      { label: "SINGLE",      href: "/products?type=single" },
-      { label: "BEST SELLER", href: "/products?featured=true" },
-    ],
-  },
-  {
-    title: "COMMUNITY",
-    items: [
-      { label: "NOTICE", href: "/community/notice" },
-      { label: "EVENT",  href: "/community/event" },
-    ],
-  },
-  {
-    title: "MEMBERSHIP",
-    comingSoon: true,
-    items: [],
-  },
-];
-
 export function NavMenu({ open, onClose }: NavMenuProps) {
+  const t = getMessages();
+
+  const SECTIONS = [
+    {
+      title: t.nav.sections.about,
+      items: [
+        { label: t.nav.links.brandStory, href: "/story" },
+        { label: t.nav.links.look, href: "/look" },
+      ],
+    },
+    {
+      title: t.nav.sections.shop,
+      items: [
+        { label: t.nav.links.all, href: "/products" },
+        { label: t.nav.links.giftBox, href: "/products?type=gift_box" },
+        { label: t.nav.links.set, href: "/products?type=curation_set" },
+        { label: t.nav.links.single, href: "/products?type=single" },
+        { label: t.nav.links.bestSeller, href: "/products?featured=true" },
+      ],
+    },
+    {
+      title: t.nav.sections.community,
+      items: [
+        { label: t.nav.links.notice, href: "/community/notice" },
+        { label: t.nav.links.event, href: "/community/event" },
+      ],
+    },
+    {
+      title: t.nav.sections.membership,
+      comingSoon: true,
+      items: [] as { label: string; href: string }[],
+    },
+  ];
+
   if (!open) return null;
 
   return (
@@ -56,13 +59,13 @@ export function NavMenu({ open, onClose }: NavMenuProps) {
             onClick={onClose}
             className="text-[12px] font-bold uppercase tracking-[0.2em] text-dami-800 dark:text-white"
           >
-            DAMI BEAUTY
+            {t.brand.name}
           </Link>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Kapat"
-            className="text-dami-400 transition-colors hover:text-dami-800 dark:text-dami-500 dark:hover:text-white"
+            aria-label={t.search.close}
+            className="text-dami-500 transition-colors hover:text-dami-800 dark:text-dami-400 dark:hover:text-white"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -79,7 +82,7 @@ export function NavMenu({ open, onClose }: NavMenuProps) {
                 </p>
 
                 {section.comingSoon ? (
-                  <p className="text-[12px] font-medium text-dami-300 dark:text-dami-500">Yakında</p>
+                  <p className="text-[12px] font-medium text-dami-400 dark:text-dami-500">{t.nav.comingSoon}</p>
                 ) : (
                   <ul className="space-y-0.5">
                     {section.items.map((item) => (
@@ -103,7 +106,7 @@ export function NavMenu({ open, onClose }: NavMenuProps) {
 
         <div className="shrink-0 border-t border-dami-200 px-6 py-3 dark:border-dami-800">
           <p className="text-[10px] uppercase tracking-widest text-dami-400 dark:text-dami-500">
-            © {new Date().getFullYear()} Dami Beauty
+            © {new Date().getFullYear()} {t.brand.name}
           </p>
         </div>
       </div>

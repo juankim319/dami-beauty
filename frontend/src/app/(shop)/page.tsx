@@ -18,7 +18,6 @@ async function getHomeData() {
       apiFetch<Campaign | null>("/campaigns/active").catch(() => null),
       apiFetch<InstagramPost[]>("/instagram").catch(() => []),
     ]);
-    // NEW ARRIVALS = products not in featured list (by id), up to 8
     const featuredIds = new Set(featured.map((p) => p.id));
     const newArrivals = all.filter((p) => !featuredIds.has(p.id)).slice(0, 8);
     return { featured, newArrivals, campaign, instagram };
@@ -27,16 +26,7 @@ async function getHomeData() {
   }
 }
 
-/* Section heading — exactly hince style */
-function SectionHeading({
-  title,
-  href,
-  label = "전체보기",
-}: {
-  title: string;
-  href: string;
-  label?: string;
-}) {
+function SectionHeading({ title, href }: { title: string; href: string }) {
   return (
     <div className="mb-7 flex items-baseline justify-between border-b border-dami-200 pb-4 dark:border-dami-700">
       <h2 className="section-title">{title}</h2>
@@ -44,7 +34,7 @@ function SectionHeading({
         href={href}
         className="text-[10px] font-medium uppercase tracking-[0.2em] text-dami-400 transition-colors hover:text-dami-900 dark:text-dami-500 dark:hover:text-white"
       >
-        {label} +
+        {t.home.viewAllPlus}
       </Link>
     </div>
   );
@@ -55,13 +45,11 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ① Hero — full viewport height */}
       <HeroCampaign campaign={campaign} />
 
-      {/* ② BEST SELLER */}
       {featured.length > 0 && (
         <section className="px-5 py-14 md:px-10 md:py-16">
-          <SectionHeading title="BEST SELLER" href="/products?featured=true" />
+          <SectionHeading title={t.home.bestSellerSection} href="/products?featured=true" />
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-7 md:gap-y-12">
             {featured.slice(0, 8).map((p) => (
               <ProductCard key={p.id} product={p} />
@@ -70,10 +58,9 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ③ NEW ARRIVALS */}
       {newArrivals.length > 0 && (
         <section className="border-t border-dami-200 px-5 py-14 dark:border-dami-700 md:px-10 md:py-16">
-          <SectionHeading title="NEW ARRIVALS" href="/products" />
+          <SectionHeading title={t.home.newArrivals} href="/products" />
           <div className="grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-4 md:gap-x-7 md:gap-y-12">
             {newArrivals.slice(0, 8).map((p) => (
               <ProductCard key={p.id} product={p} />
@@ -82,10 +69,9 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ④ Empty state — shown only when NO products at all */}
       {featured.length === 0 && newArrivals.length === 0 && (
         <section className="px-5 py-20 text-center md:px-10">
-          <p className="section-label">DAMI BEAUTY</p>
+          <p className="section-label">{t.brand.name}</p>
           <p className="mt-4 text-sm text-dami-400">{t.home.comingSoon}</p>
           <Link href="/products" className="btn-secondary mt-8 inline-flex">
             {t.nav.products}
@@ -93,7 +79,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* ⑤ Instagram grid */}
       {instagram.length > 0 && (
         <section className="border-t border-dami-200 dark:border-dami-700">
           <div className="px-5 md:px-10">

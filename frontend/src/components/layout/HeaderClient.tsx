@@ -6,8 +6,14 @@ import { useCart } from "@/contexts/CartContext";
 import { NavMenu } from "./NavMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import { HeaderSearch } from "./HeaderSearch";
+import { getMessages } from "@/lib/i18n";
+
+/** Unified header control color — visible on blush-white background */
+const HEADER_CTRL =
+  "text-dami-700 transition-colors hover:text-dami-900 dark:text-dami-300 dark:hover:text-white";
 
 export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
+  const t = getMessages();
   const { itemCount } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -20,14 +26,16 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
         <button
           type="button"
           onClick={() => setMenuOpen(true)}
-          className="group flex items-center gap-2.5 text-dami-400 transition-colors hover:text-dami-800 dark:text-dami-400 dark:hover:text-white"
-          aria-label="Menüyü aç"
+          className={`group flex items-center gap-2.5 ${HEADER_CTRL}`}
+          aria-label={t.nav.menu}
         >
           <span className="relative flex h-4 w-4 flex-col justify-center">
             <span className="block h-px w-4 bg-current" />
             <span className="mt-[5px] block h-px w-3 bg-current transition-all duration-200 group-hover:w-4" />
           </span>
-          <span className="hidden text-[10px] font-medium uppercase tracking-[0.22em] sm:block">Menu</span>
+          <span className="hidden text-[10px] font-medium uppercase tracking-[0.22em] sm:block">
+            {t.nav.menu}
+          </span>
         </button>
 
         {/* Center: brand name */}
@@ -35,7 +43,7 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
           href="/"
           className="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold uppercase tracking-[0.18em] text-dami-900 dark:text-white"
         >
-          DAMI BEAUTY
+          {t.brand.name}
         </Link>
 
         {/* Right: search + theme + cart */}
@@ -44,8 +52,8 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
           <ThemeToggle />
           <Link
             href="/cart"
-            className="relative flex items-center gap-1 text-dami-400 transition-colors hover:text-dami-800 dark:text-dami-400 dark:hover:text-white"
-            aria-label="Sepet"
+            className={`relative flex items-center gap-1 ${HEADER_CTRL}`}
+            aria-label={t.nav.cart}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -33,7 +33,7 @@ export function InstagramGrid({ posts }: InstagramGridProps) {
           >
             <Image
               src={post.image_url}
-              alt="Instagram"
+              alt={t.brand.instagram}
               fill
               className="object-cover transition hover:scale-105"
               sizes="33vw"

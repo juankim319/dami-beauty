@@ -55,10 +55,10 @@ export function HeroCampaign({ campaign }: HeroCampaignProps) {
           {/* Centered content */}
           <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
             <p className="mb-4 text-[9px] font-medium uppercase tracking-[0.45em] text-dami-400 dark:text-dami-500">
-              NEW COLLECTION
+              {t.home.newCollection}
             </p>
             <h1 className="text-3xl font-extralight tracking-[0.4em] text-dami-800 dark:text-dami-100 md:text-5xl">
-              DAMI BEAUTY
+              {t.brand.name}
             </h1>
             {subtitle && (
               <p className="mt-5 max-w-xs text-xs leading-relaxed text-dami-400 dark:text-dami-500 md:text-sm">
@@ -75,7 +75,7 @@ export function HeroCampaign({ campaign }: HeroCampaignProps) {
           {/* Scroll indicator */}
           <div className="relative z-10 flex justify-center pb-10">
             <div className="flex flex-col items-center gap-2">
-              <span className="text-[9px] uppercase tracking-[0.3em] text-dami-300 dark:text-dami-600">scroll</span>
+              <span className="text-[9px] uppercase tracking-[0.3em] text-dami-400 dark:text-dami-600">{t.home.scrollHint}</span>
               <div className="h-6 w-px bg-dami-300 dark:bg-dami-600" />
             </div>
           </div>

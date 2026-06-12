@@ -54,7 +54,7 @@ export default async function ProductsPage({ searchParams }: Props) {
         </h1>
         {searchQuery && (
           <p className="mt-2 text-sm text-dami-500">
-            {products.length} {products.length === 1 ? "ürün" : "ürün"}
+            {t.products.count(products.length)}
           </p>
         )}
       </div>

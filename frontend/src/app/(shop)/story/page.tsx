@@ -62,7 +62,7 @@ export default function StoryPage() {
             rel="noopener noreferrer"
             className="btn-secondary"
           >
-            Instagram ↗
+            {t.story.followInstagram}
           </a>
         </div>
       </div>

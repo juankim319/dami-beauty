@@ -87,9 +87,9 @@ export function NavMenu({ open, onClose }: NavMenuProps) {
                         <Link
                           href={item.href}
                           onClick={onClose}
-                          className="group flex items-center gap-2.5 rounded px-2 py-2 text-[13px] font-medium uppercase tracking-wide text-gray-800 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-dami-200 dark:hover:bg-dami-900/40 dark:hover:text-white"
+                          className="group flex items-center gap-2.5 px-2 py-2 text-[12px] font-medium uppercase tracking-wide text-dami-700 transition-colors hover:text-dami-900 dark:text-dami-300 dark:hover:text-white"
                         >
-                          <span className="inline-block h-[1.5px] w-0 bg-dami-600 transition-all duration-200 group-hover:w-3 dark:bg-dami-400" />
+                          <span className="inline-block h-px w-0 bg-dami-900 transition-all duration-200 group-hover:w-3 dark:bg-white" />
                           {item.label}
                         </Link>
                       </li>

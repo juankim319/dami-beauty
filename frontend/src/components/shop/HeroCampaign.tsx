@@ -14,7 +14,7 @@ export function HeroCampaign({ campaign }: HeroCampaignProps) {
   const hasBanner = !!campaign?.banner_url;
 
   return (
-    <section className="relative flex min-h-[55vh] items-end overflow-hidden md:min-h-[68vh]">
+    <section className="relative flex min-h-[100dvh] flex-col overflow-hidden">
       {hasBanner ? (
         <>
           <Image
@@ -25,37 +25,62 @@ export function HeroCampaign({ campaign }: HeroCampaignProps) {
             className="object-cover"
             sizes="100vw"
           />
-          {/* Subtle gradient — photography-first, text readable */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
+          {/* Minimal bottom-gradient — photography first */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+          {/* Text — bottom left, hince-style */}
+          <div className="relative z-10 mt-auto w-full px-6 pb-16 md:px-12 md:pb-20">
+            <p className="mb-2 text-[9px] font-medium uppercase tracking-[0.35em] text-white/50">
+              {t.brand.name}
+            </p>
+            <h1 className="max-w-md text-xl font-light tracking-wide text-white md:text-3xl">
+              {title}
+            </h1>
+            {subtitle && (
+              <p className="mt-3 max-w-sm text-xs leading-relaxed text-white/65 md:text-sm">
+                {subtitle}
+              </p>
+            )}
+            <Link
+              href="/products"
+              className="mt-8 inline-flex border border-white/60 px-7 py-2.5 text-[10px] font-medium uppercase tracking-[0.2em] text-white transition-colors hover:bg-white hover:text-dami-900"
+            >
+              {t.home.shopNow}
+            </Link>
+          </div>
         </>
       ) : (
-        /* No banner: warm editorial background */
-        <div className="absolute inset-0 bg-gradient-to-br from-dami-100 via-dami-50 to-[#EDE8E0] dark:from-dami-800 dark:via-dami-900 dark:to-dami-900" />
+        /* No banner — clean full-screen editorial placeholder, hince-style */
+        <>
+          <div className="absolute inset-0 bg-dami-100 dark:bg-dami-800" />
+          {/* Centered content */}
+          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
+            <p className="mb-4 text-[9px] font-medium uppercase tracking-[0.45em] text-dami-400 dark:text-dami-500">
+              NEW COLLECTION
+            </p>
+            <h1 className="text-3xl font-extralight tracking-[0.4em] text-dami-800 dark:text-dami-100 md:text-5xl">
+              DAMI BEAUTY
+            </h1>
+            {subtitle && (
+              <p className="mt-5 max-w-xs text-xs leading-relaxed text-dami-400 dark:text-dami-500 md:text-sm">
+                {subtitle}
+              </p>
+            )}
+            <Link
+              href="/products"
+              className="mt-10 inline-flex border border-dami-800 px-8 py-3 text-[10px] font-medium uppercase tracking-[0.2em] text-dami-800 transition-colors hover:bg-dami-900 hover:border-dami-900 hover:text-white dark:border-dami-300 dark:text-dami-200 dark:hover:bg-white dark:hover:border-white dark:hover:text-dami-900"
+            >
+              {t.home.shopNow}
+            </Link>
+          </div>
+          {/* Scroll indicator */}
+          <div className="relative z-10 flex justify-center pb-10">
+            <div className="flex flex-col items-center gap-2">
+              <span className="text-[9px] uppercase tracking-[0.3em] text-dami-300 dark:text-dami-600">scroll</span>
+              <div className="h-6 w-px bg-dami-300 dark:bg-dami-600" />
+            </div>
+          </div>
+        </>
       )}
-
-      <div className="relative z-10 w-full px-6 pb-14 md:px-14 md:pb-20">
-        <p className={`mb-3 text-[9px] font-medium uppercase tracking-[0.3em] ${hasBanner ? "text-white/55" : "text-dami-400 dark:text-dami-500"}`}>
-          {t.brand.name}
-        </p>
-        <h1 className={`max-w-lg text-xl font-medium leading-snug tracking-wide md:text-3xl ${hasBanner ? "text-white" : "text-dami-800 dark:text-dami-100"}`}>
-          {title}
-        </h1>
-        {subtitle && (
-          <p className={`mt-4 max-w-sm text-xs leading-relaxed md:text-sm ${hasBanner ? "text-white/70" : "text-dami-500 dark:text-dami-400"}`}>
-            {subtitle}
-          </p>
-        )}
-        <Link
-          href="/products"
-          className={`mt-8 inline-flex px-6 py-2.5 text-[11px] font-medium uppercase tracking-widest transition-all duration-200 ${
-            hasBanner
-              ? "border border-white/60 text-white hover:bg-white hover:text-dami-900"
-              : "border border-dami-700 text-dami-700 hover:bg-dami-800 hover:border-dami-800 hover:text-white dark:border-dami-400 dark:text-dami-200 dark:hover:bg-dami-700 dark:hover:border-dami-700"
-          }`}
-        >
-          {t.home.shopNow}
-        </Link>
-      </div>
     </section>
   );
 }

@@ -24,22 +24,22 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
           aria-label="Menüyü aç"
         >
           <span className="relative flex h-4 w-4 flex-col justify-center">
-            <span className="block h-px w-4 bg-current transition-transform duration-300 group-hover:w-3.5" />
-            <span className="mt-[5px] block h-px w-3 bg-current transition-all duration-300 group-hover:w-4" />
+            <span className="block h-px w-4 bg-current" />
+            <span className="mt-[5px] block h-px w-3 bg-current transition-all duration-200 group-hover:w-4" />
           </span>
-          <span className="text-[10px] font-medium uppercase tracking-[0.22em]">Menu</span>
+          <span className="hidden text-[10px] font-medium uppercase tracking-[0.22em] sm:block">Menu</span>
         </button>
 
         {/* Center: brand name */}
         <Link
           href="/"
-          className="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold uppercase tracking-[0.15em] text-dami-900 dark:text-white"
+          className="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold uppercase tracking-[0.18em] text-dami-900 dark:text-white"
         >
           DAMI BEAUTY
         </Link>
 
         {/* Right: search + theme + cart */}
-        <div className="flex items-center gap-2 md:gap-3">
+        <div className="flex items-center gap-3 md:gap-4">
           <HeaderSearch />
           <ThemeToggle />
           <Link
@@ -53,7 +53,7 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              strokeWidth={1.5}
+              strokeWidth={1.4}
             >
               <path
                 strokeLinecap="round"
@@ -62,7 +62,7 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
               />
             </svg>
             {itemCount > 0 && (
-              <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-brand px-1 text-[10px] font-medium text-white">
+              <span className="absolute -right-1.5 -top-1.5 flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-dami-900 px-1 text-[9px] font-medium text-white dark:bg-white dark:text-dami-900">
                 {itemCount}
               </span>
             )}

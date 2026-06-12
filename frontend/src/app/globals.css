@@ -3,21 +3,21 @@
 @tailwind utilities;
 
 :root {
-  --background: #FAFAF8;
-  --foreground: #1A1916;
+  --background: #FFFFFF;
+  --foreground: #1A1A1A;
   --surface: #FFFFFF;
-  --surface-muted: #F4F3F0;
-  --border: #E5E3DE;
-  --border-subtle: rgba(26, 25, 22, 0.08);
+  --surface-muted: #F5F5F5;
+  --border: #E5E5E5;
+  --border-subtle: rgba(0, 0, 0, 0.06);
 }
 
 .dark {
-  --background: #0F0E0C;
-  --foreground: #F4F3F0;
-  --surface: #1A1916;
-  --surface-muted: #2D2B26;
-  --border: #2D2B26;
-  --border-subtle: rgba(228, 227, 222, 0.10);
+  --background: #111111;
+  --foreground: #F2F2F2;
+  --surface: #1A1A1A;
+  --surface-muted: #222222;
+  --border: #2E2E2E;
+  --border-subtle: rgba(255, 255, 255, 0.07);
 }
 
 html {
@@ -34,34 +34,34 @@ body {
 }
 
 @layer components {
-  /* Primary: dark charcoal fill — like hince's black CTA */
+  /* Primary: solid black CTA — hince style */
   .btn-primary {
-    @apply inline-flex items-center justify-center bg-dami-800 px-6 py-2.5 text-[11px] font-medium uppercase tracking-widest text-white transition-all duration-200 hover:bg-dami-900 active:scale-[0.98] disabled:opacity-40 dark:bg-dami-700 dark:hover:bg-dami-800;
+    @apply inline-flex items-center justify-center bg-dami-900 px-6 py-2.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white transition-all duration-200 hover:bg-dami-800 active:scale-[0.98] disabled:opacity-40 dark:bg-white dark:text-dami-900 dark:hover:bg-dami-100;
   }
 
-  /* Secondary: outlined dark */
+  /* Secondary: outlined black */
   .btn-secondary {
-    @apply inline-flex items-center justify-center border border-dami-700 bg-transparent px-6 py-2.5 text-[11px] font-medium uppercase tracking-widest text-dami-700 transition-all duration-200 hover:bg-dami-800 hover:border-dami-800 hover:text-white active:scale-[0.98] dark:border-dami-300 dark:text-dami-200 dark:hover:bg-dami-700 dark:hover:border-dami-700 dark:hover:text-white;
+    @apply inline-flex items-center justify-center border border-dami-900 bg-transparent px-6 py-2.5 text-[11px] font-medium uppercase tracking-[0.2em] text-dami-900 transition-all duration-200 hover:bg-dami-900 hover:text-white active:scale-[0.98] dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-dami-900;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center gap-1 text-[11px] font-medium uppercase tracking-widest text-dami-500 underline-offset-4 hover:text-dami-800 hover:underline transition-colors dark:text-dami-400 dark:hover:text-dami-100;
+    @apply inline-flex items-center gap-1 text-[10px] font-medium uppercase tracking-[0.2em] text-dami-400 underline-offset-4 hover:text-dami-900 hover:underline transition-colors dark:text-dami-500 dark:hover:text-dami-100;
   }
 
   .card {
-    @apply bg-[var(--surface)] p-4 dark:shadow-[0_2px_16px_rgba(0,0,0,0.25)];
+    @apply bg-[var(--surface)] p-4;
   }
 
   .input-field {
-    @apply w-full border-b border-[var(--border)] bg-transparent px-0 py-2.5 text-sm text-[var(--foreground)] outline-none transition placeholder:text-dami-300 focus:border-dami-700 dark:placeholder:text-dami-600 dark:focus:border-dami-400;
+    @apply w-full border-b border-[var(--border)] bg-transparent px-0 py-2.5 text-sm text-[var(--foreground)] outline-none transition placeholder:text-dami-300 focus:border-dami-900 dark:placeholder:text-dami-600 dark:focus:border-dami-300;
   }
 
   .section-title {
-    @apply text-base font-medium tracking-wide text-dami-800 md:text-lg dark:text-dami-100;
+    @apply text-[11px] font-bold uppercase tracking-[0.25em] text-dami-800 dark:text-dami-100;
   }
 
   .section-label {
-    @apply text-[10px] font-medium uppercase tracking-widest text-dami-400 dark:text-dami-500;
+    @apply text-[9px] font-medium uppercase tracking-[0.3em] text-dami-400 dark:text-dami-500;
   }
 
   .divider {
@@ -70,7 +70,7 @@ body {
 }
 
 .product-img-wrap img {
-  transition: transform 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 @media (hover: hover) and (min-width: 768px) {
   .product-img-wrap:not(.group\/zoom):hover img {
@@ -80,34 +80,17 @@ body {
 
 .nav-menu-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #E5E3DE transparent;
+  scrollbar-color: #E5E5E5 transparent;
 }
 
 .dark .nav-menu-scroll {
-  scrollbar-color: #2D2B26 transparent;
+  scrollbar-color: #2E2E2E transparent;
 }
 
-.nav-menu-scroll::-webkit-scrollbar {
-  width: 4px;
-}
-
-.nav-menu-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+.nav-menu-scroll::-webkit-scrollbar { width: 4px; }
+.nav-menu-scroll::-webkit-scrollbar-track { background: transparent; }
 .nav-menu-scroll::-webkit-scrollbar-thumb {
-  background-color: #E5E3DE;
+  background-color: #E5E5E5;
   border-radius: 9999px;
 }
-
-.dark .nav-menu-scroll::-webkit-scrollbar-thumb {
-  background-color: #2D2B26;
-}
-
-.nav-menu-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: #C8C5BC;
-}
-
-.dark .nav-menu-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: #4A4740;
-}
+.dark .nav-menu-scroll::-webkit-scrollbar-thumb { background-color: #2E2E2E; }

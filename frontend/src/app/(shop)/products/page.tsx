@@ -67,10 +67,10 @@ export default async function ProductsPage({ searchParams }: Props) {
             <Link
               key={value || "all"}
               href={value ? `/products?type=${value}` : "/products"}
-              className={`whitespace-nowrap px-5 py-2 text-xs font-medium uppercase tracking-widest transition-colors ${
+              className={`whitespace-nowrap px-5 py-2 text-[10px] font-medium uppercase tracking-[0.2em] transition-colors ${
                 active
-                  ? "bg-dami-800 text-white dark:bg-dami-700"
-                  : "border border-dami-200 text-dami-500 hover:border-dami-700 hover:text-dami-800 dark:border-dami-600 dark:text-dami-400 dark:hover:border-dami-300 dark:hover:text-white"
+                  ? "bg-dami-900 text-white dark:bg-white dark:text-dami-900"
+                  : "border border-dami-200 text-dami-500 hover:border-dami-900 hover:text-dami-900 dark:border-dami-700 dark:text-dami-400 dark:hover:border-white dark:hover:text-white"
               }`}
             >
               {label}

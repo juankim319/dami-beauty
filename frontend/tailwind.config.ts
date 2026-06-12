@@ -10,20 +10,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Warm neutral palette — white base, charcoal dark (hince-inspired)
+        // Pure neutral gray — exactly hince.co.kr color system
         dami: {
-          50:  "#FAFAF8",   // warm white — page background
-          100: "#F4F3F0",   // very light warm surface
-          200: "#E5E3DE",   // borders / dividers
-          300: "#C8C5BC",   // muted / placeholder
-          400: "#8F8C84",   // secondary text
-          500: "#6B6860",   // body text (lighter)
-          600: "#4A4740",   // body text
-          700: "#2D2B26",   // primary text / dark button
-          800: "#1A1916",   // headings
-          900: "#0F0E0C",   // near-black (footer, dark surfaces)
+          50:  "#FFFFFF",   // pure white
+          100: "#F5F5F5",   // page background / light surface
+          200: "#E5E5E5",   // borders / dividers
+          300: "#C4C4C4",   // placeholder / muted elements
+          400: "#9B9B9B",   // secondary text
+          500: "#767676",   // body text (lighter)
+          600: "#4A4A4A",   // body text
+          700: "#333333",   // primary text
+          800: "#1A1A1A",   // headings / dark surfaces
+          900: "#0D0D0D",   // near-black (footer, emphasis)
         },
-        // Brand accent — burgundy used only for small highlights
+        // Brand accent — used only for small highlights (cart badge, etc.)
         brand: {
           DEFAULT: "#8B1A4A",
           light:   "#F5D0DE",
@@ -39,11 +39,11 @@ const config: Config = {
         widest2: "0.25em",
       },
       borderRadius: {
-        dami: "2px",
+        dami: "0px",
       },
       boxShadow: {
-        soft: "0 8px 40px rgba(26, 25, 22, 0.10)",
-        card: "0 2px 12px rgba(15, 14, 12, 0.06)",
+        soft: "0 8px 40px rgba(0, 0, 0, 0.08)",
+        card: "0 2px 12px rgba(0, 0, 0, 0.05)",
       },
       transitionTimingFunction: {
         smooth: "cubic-bezier(0.25, 0.1, 0.25, 1)",

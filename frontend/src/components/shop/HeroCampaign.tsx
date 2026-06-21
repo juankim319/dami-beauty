@@ -26,7 +26,7 @@ export function HeroCampaign({ campaign }: HeroCampaignProps) {
             sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
-          <div className="relative z-10 mt-auto w-full px-6 pb-16 md:px-12 md:pb-20">
+          <div className="relative z-10 mt-auto w-full px-6 pb-16 md:px-12 md:pb-20 animate-fade-in-up">
             <p className="mb-2 text-[9px] font-medium uppercase tracking-[0.35em] text-white/55">
               {t.brand.name}
             </p>
@@ -48,12 +48,12 @@ export function HeroCampaign({ campaign }: HeroCampaignProps) {
         </>
       ) : (
         <>
-          <div className="absolute inset-0 bg-gradient-to-br from-[#FBF4F2] via-[#F5E8E4] to-[#EDD5CF]" />
-          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
-            <p className="mb-4 text-[9px] font-medium uppercase tracking-[0.45em] text-dami-400">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#FEF8F7] via-[#FDF1EF] to-[#FCE9E6]" />
+          <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center animate-fade-in-up">
+            <p className="mb-4 text-[9px] font-medium uppercase tracking-[0.45em] text-dami-400 animate-fade-in-up animate-fade-in-up-delay-1">
               {t.home.newCollection}
             </p>
-            <h1 className="text-3xl font-extralight tracking-[0.35em] text-dami-800 md:text-5xl">
+            <h1 className="text-3xl font-extralight tracking-[0.35em] text-dami-800 md:text-5xl animate-fade-in-up animate-fade-in-up-delay-2">
               {t.brand.name}
             </h1>
             {subtitle && (
@@ -63,7 +63,7 @@ export function HeroCampaign({ campaign }: HeroCampaignProps) {
             )}
             <Link
               href="/products"
-              className="mt-10 inline-flex border border-dami-700/30 bg-white/40 px-8 py-3 text-[10px] font-medium uppercase tracking-[0.2em] text-dami-800 backdrop-blur-sm transition-colors hover:border-dami-800 hover:bg-white"
+              className="mt-10 inline-flex border border-dami-700/30 bg-white/40 px-8 py-3 text-[10px] font-medium uppercase tracking-[0.2em] text-dami-800 backdrop-blur-sm transition-all duration-300 hover:border-dami-800 hover:bg-white hover:shadow-soft animate-fade-in-up animate-fade-in-up-delay-3"
             >
               {t.home.shopNow}
             </Link>
@@ -71,7 +71,7 @@ export function HeroCampaign({ campaign }: HeroCampaignProps) {
           <div className="relative z-10 flex justify-center pb-10">
             <div className="flex flex-col items-center gap-2">
               <span className="text-[9px] uppercase tracking-[0.3em] text-dami-400">{t.home.scrollHint}</span>
-              <div className="h-6 w-px bg-dami-300" />
+              <div className="scroll-hint-line h-6 w-px bg-dami-300" />
             </div>
           </div>
         </>

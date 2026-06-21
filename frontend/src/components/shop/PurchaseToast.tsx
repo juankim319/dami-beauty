@@ -8,7 +8,7 @@ import {
   type SocialProofEvent,
 } from "@/lib/social-proof";
 
-const INTERVAL_MS = 10_000;
+const INTERVAL_MS = 60_000;
 const VISIBLE_MS = 4_500;
 
 export function PurchaseToast() {

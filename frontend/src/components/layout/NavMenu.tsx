@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getMessages } from "@/lib/i18n";
 
@@ -10,15 +11,26 @@ interface NavMenuProps {
 
 export function NavMenu({ open, onClose }: NavMenuProps) {
   const t = getMessages();
+  const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      requestAnimationFrame(() => setVisible(true));
+      document.body.style.overflow = "hidden";
+    } else {
+      setVisible(false);
+      document.body.style.overflow = "";
+      const timer = window.setTimeout(() => setMounted(false), 320);
+      return () => window.clearTimeout(timer);
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   const SECTIONS = [
-    {
-      title: t.nav.sections.about,
-      items: [
-        { label: t.nav.links.brandStory, href: "/story" },
-        { label: t.nav.links.look, href: "/look" },
-      ],
-    },
     {
       title: t.nav.sections.shop,
       items: [
@@ -41,20 +53,37 @@ export function NavMenu({ open, onClose }: NavMenuProps) {
       comingSoon: true,
       items: [] as { label: string; href: string }[],
     },
+    {
+      title: t.nav.sections.about,
+      items: [
+        { label: t.nav.links.brandStory, href: "/story" },
+        { label: t.nav.links.look, href: "/look" },
+      ],
+    },
   ];
 
-  if (!open) return null;
+  if (!mounted) return null;
 
   return (
     <>
-      <div className="fixed inset-0 z-[90] bg-black/20 backdrop-blur-[2px]" onClick={onClose} />
+      <div
+        className={`fixed inset-0 z-[90] bg-black/20 backdrop-blur-[2px] transition-opacity duration-300 ${
+          visible ? "opacity-100" : "opacity-0"
+        }`}
+        onClick={onClose}
+        aria-hidden
+      />
 
-      <div className="fixed left-0 top-0 z-[100] flex h-dvh w-72 flex-col bg-[#FDFAF9] shadow-xl md:w-80">
+      <div
+        className={`fixed left-0 top-0 z-[100] flex h-dvh w-72 flex-col bg-[#FDFAF9] shadow-xl transition-transform duration-300 ease-smooth md:w-80 ${
+          visible ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
         <div className="flex shrink-0 items-center justify-between border-b border-dami-200/80 px-6 py-5">
           <Link
             href="/"
             onClick={onClose}
-            className="text-[12px] font-semibold uppercase tracking-[0.2em] text-dami-800"
+            className="text-[12px] font-semibold uppercase tracking-[0.2em] text-dami-800 transition-opacity hover:opacity-70"
           >
             {t.brand.name}
           </Link>

@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     paytr_merchant_key: str = ""
     paytr_merchant_salt: str = ""
     paytr_test_mode: bool = True
+    # Local-only bypass when credentials are missing (never enable in production)
+    paytr_allow_dev_mock: bool = False
 
     frontend_url: str = "http://localhost:3000"
     backend_url: str = "http://localhost:8000"

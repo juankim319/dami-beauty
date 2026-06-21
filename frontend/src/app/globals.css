@@ -24,6 +24,51 @@ html {
   scroll-behavior: smooth;
 }
 
+::selection {
+  background-color: rgba(196, 112, 106, 0.18);
+  color: var(--foreground);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scrollPulse {
+  0%, 100% {
+    transform: scaleY(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scaleY(1.35);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.75s cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+.animate-fade-in-up-delay-1 { animation-delay: 0.1s; }
+.animate-fade-in-up-delay-2 { animation-delay: 0.2s; }
+.animate-fade-in-up-delay-3 { animation-delay: 0.35s; }
+
+.scroll-hint-line {
+  animation: scrollPulse 2.2s ease-in-out infinite;
+  transform-origin: top;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
@@ -66,6 +111,58 @@ body {
 
   .divider {
     @apply border-t border-[var(--border)];
+  }
+
+  .link-dash {
+    @apply inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.2em] text-dami-400 transition-colors hover:text-dami-800;
+  }
+
+  .link-dash::before {
+    content: "";
+    @apply inline-block h-px w-0 bg-brand transition-all duration-300;
+  }
+
+  .link-dash:hover::before {
+    width: 0.75rem;
+  }
+
+  .step-heading {
+    @apply mb-4 flex items-center gap-3 text-[10px] font-medium uppercase tracking-[0.28em] text-dami-400;
+  }
+
+  .step-heading::after {
+    content: "";
+    @apply h-px flex-1 bg-dami-200;
+  }
+
+  .filter-pill {
+    @apply whitespace-nowrap border-b-2 border-transparent px-4 py-2.5 text-[10px] font-medium uppercase tracking-[0.2em] text-dami-400 transition-all duration-200 hover:text-dami-800;
+  }
+
+  .filter-pill-active {
+    @apply border-brand text-dami-900;
+  }
+
+  .surface-card {
+    @apply border border-dami-200 bg-[var(--surface)] p-5;
+  }
+
+  /* Mobile checkout — app-like full-screen form */
+  .checkout-shell .input-field {
+    @apply rounded-xl border border-dami-200 bg-white px-4 py-3.5 text-base text-dami-900 shadow-[0_1px_2px_rgba(74,14,35,0.04)] outline-none transition placeholder:text-dami-300 focus:border-dami-700 focus:ring-2 focus:ring-dami-700/10 dark:bg-[#1a1216] dark:text-dami-50;
+    border-bottom-width: 1px;
+  }
+
+  .checkout-shell .section-label {
+    @apply mb-1.5 text-[10px] tracking-[0.12em] text-dami-500;
+  }
+
+  .checkout-shell .step-heading {
+    @apply mb-3 text-xs font-semibold normal-case tracking-wide text-dami-800;
+  }
+
+  .checkout-shell .step-heading::after {
+    @apply hidden;
   }
 }
 

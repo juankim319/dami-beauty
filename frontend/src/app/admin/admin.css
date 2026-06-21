@@ -1,0 +1,15 @@
+/* Native select dropdowns — light admin UI */
+.admin-panel select {
+  color-scheme: light;
+}
+
+.admin-panel select option {
+  background-color: #ffffff;
+  color: #1e293b;
+}
+
+.admin-panel select option:checked,
+.admin-panel select option:hover {
+  background-color: #fdf2f4;
+  color: #9e4a5a;
+}

@@ -1,7 +1,3 @@
-import { DISTRICTS, NEIGHBORHOODS, PROVINCES, STREETS } from "./data";
-
-export { PROVINCES, DISTRICTS, NEIGHBORHOODS, STREETS };
-
 export interface AddressParts {
   il: string;
   ilce: string;
@@ -11,18 +7,7 @@ export interface AddressParts {
   floor: string;
   apartment: string;
   postal_code?: string;
-}
-
-export function getDistricts(il: string): string[] {
-  return DISTRICTS[il] ?? [];
-}
-
-export function getNeighborhoods(il: string, ilce: string): string[] {
-  return NEIGHBORHOODS[`${il}|${ilce}`] ?? [];
-}
-
-export function getStreets(il: string, ilce: string, mahalle: string): string[] {
-  return STREETS[`${il}|${ilce}|${mahalle}`] ?? [];
+  settlement_kind?: "mahalle" | "koy";
 }
 
 /** Güneşli Mahallesi 1240. Sokak, No 4, Kat 2, Daire 3, Bağcılar, İstanbul, Türkiye */
@@ -31,7 +16,14 @@ export function buildFullAddress(parts: AddressParts): string {
 
   if (parts.mahalle.trim()) {
     const m = parts.mahalle.trim();
-    segments.push(m.toLowerCase().includes("mahalle") ? m : `${m} Mahallesi`);
+    const lower = m.toLocaleLowerCase("tr-TR");
+    if (lower.includes("mahalle") || lower.includes("köy") || lower.includes("koy")) {
+      segments.push(m);
+    } else if (parts.settlement_kind === "koy") {
+      segments.push(`${m} Köyü`);
+    } else {
+      segments.push(`${m} Mahallesi`);
+    }
   }
   if (parts.street.trim()) segments.push(parts.street.trim());
 
@@ -48,10 +40,19 @@ export function buildFullAddress(parts: AddressParts): string {
   return segments.join(", ");
 }
 
-export function filterOptions(options: string[], query: string, limit = 20): string[] {
+export function filterOptions(options: string[], query: string, limit = 500): string[] {
   const q = query.trim().toLocaleLowerCase("tr-TR");
   if (!q) return options.slice(0, limit);
   return options
     .filter((o) => o.toLocaleLowerCase("tr-TR").includes(q))
     .slice(0, limit);
 }
+
+export {
+  fetchProvinces,
+  fetchDistricts,
+  fetchSettlements,
+  fetchStreets,
+  type AddressLookupItem,
+  type SettlementLookupItem,
+} from "./api";

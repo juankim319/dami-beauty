@@ -41,6 +41,7 @@ class ProductBase(BaseModel):
     campaign_id: str | None = None
     gift_wrap_available: bool = True
     active: bool = True
+    tags: list[str] = Field(default_factory=list)
 
 
 class ProductCreate(ProductBase):
@@ -60,6 +61,7 @@ class ProductUpdate(BaseModel):
     campaign_id: str | None = None
     gift_wrap_available: bool | None = None
     active: bool | None = None
+    tags: list[str] | None = None
 
 
 class ProductResponse(ProductBase):
@@ -194,6 +196,16 @@ class PayTRTokenRequest(BaseModel):
 class PayTRTokenResponse(BaseModel):
     token: str
     iframe_url: str
+    test_mode: bool = False
+    dev_mock: bool = False
+
+
+class PayTRStatusResponse(BaseModel):
+    mode: str  # live | test | dev_mock | unconfigured
+    configured: bool
+    test_mode: bool
+    callback_url: str
+    allow_dev_mock: bool
 
 
 class InstagramPostBase(BaseModel):

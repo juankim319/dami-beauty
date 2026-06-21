@@ -23,6 +23,7 @@ export interface Product {
   gift_wrap_available: boolean;
   active: boolean;
   created_at?: string;
+  tags?: string[];
 }
 
 export interface Campaign {

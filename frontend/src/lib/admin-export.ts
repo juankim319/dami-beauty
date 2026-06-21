@@ -1,6 +1,7 @@
 import * as XLSX from "xlsx";
 import type { Order, ShippingAddress } from "@/types";
 import { ORDER_STATUS_LABEL } from "@/lib/admin-order-utils";
+import { getOrderPriceBreakdown } from "@/lib/admin-order-pricing";
 
 function tryToKurus(kurus: number): string {
   return (kurus / 100).toFixed(2);
@@ -77,6 +78,7 @@ export function exportSalesExcel(orders: Order[], year: number, month: number) {
       "Adet",
       "Ara Toplam (TRY)",
       "Kargo (TRY)",
+      "Hediye Paketi (TRY)",
       "Toplam (TRY)",
       "Hediye Paketi",
       "Kargo Takip",
@@ -85,6 +87,7 @@ export function exportSalesExcel(orders: Order[], year: number, month: number) {
 
   for (const o of monthOrders) {
     const qty = o.items.reduce((s, i) => s + i.quantity, 0);
+    const pricing = getOrderPriceBreakdown(o);
     rows.push([
       o.id.slice(0, 8).toUpperCase(),
       formatExportDate(o.created_at),
@@ -95,9 +98,10 @@ export function exportSalesExcel(orders: Order[], year: number, month: number) {
       o.guest_phone,
       itemsSummary(o),
       qty,
-      tryToKurus(o.subtotal_try),
-      tryToKurus(o.shipping_try),
-      tryToKurus(o.total_try),
+      tryToKurus(pricing.subtotalTry),
+      tryToKurus(pricing.shippingTry),
+      tryToKurus(pricing.giftWrapTry),
+      tryToKurus(pricing.totalTry),
       o.gift_wrap ? "Y" : "N",
       o.tracking_number ?? "",
     ]);
@@ -124,6 +128,8 @@ export function exportShippingExcel(orders: Order[]) {
       "Adres",
       "Ürünler",
       "Toplam Adet",
+      "Hediye Paketi",
+      "Hediye Mesajı",
       "Müşteri Notu",
       "Durum",
     ],
@@ -147,6 +153,8 @@ export function exportShippingExcel(orders: Order[]) {
       addr,
       itemsSummary(o),
       qty,
+      o.gift_wrap ? "Evet" : "Hayır",
+      o.gift_message ?? "",
       o.customer_notes ?? "",
       ORDER_STATUS_LABEL[o.status] ?? o.status,
     ]);

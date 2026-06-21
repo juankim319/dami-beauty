@@ -20,6 +20,7 @@ export default async function OrderPage({ params, searchParams }: Props) {
   }
 
   const isSuccess = searchParams.status === "success" || order?.status === "paid";
+  const isProcessing = searchParams.status === "success" && order?.status === "pending";
   const orderShortId = order?.id.slice(0, 8).toUpperCase() ?? "";
 
   if (!order) {
@@ -37,12 +38,15 @@ export default async function OrderPage({ params, searchParams }: Props) {
         {isSuccess ? "✓" : "⏳"}
       </div>
       <h1 className="mt-4 text-2xl font-bold text-dami-900">
-        {isSuccess ? t.order.success : t.order.detail}
+        {isProcessing ? t.order.processing : isSuccess ? t.order.success : t.order.detail}
       </h1>
       <p className="mt-2 text-dami-600">
         {t.order.number(orderShortId)}
       </p>
-      {isSuccess && (
+      {isProcessing && (
+        <p className="mt-2 text-sm text-dami-500">{t.paytr.paymentProcessing}</p>
+      )}
+      {isSuccess && !isProcessing && (
         <p className="mt-2 text-sm text-dami-500">
           {t.order.emailSent(order.guest_email)}
         </p>

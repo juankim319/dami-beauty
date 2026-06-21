@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Order } from "@/types";
 import { copyToClipboard, formatAddressClipboard } from "@/lib/admin-export";
+import { ADMIN_BTN_SECONDARY } from "@/lib/admin-form-styles";
 
 interface Props {
   order: Order;
@@ -29,11 +30,11 @@ export function CopyAddressButton({ order, className = "", label = "Adres Kopyal
       onClick={handleCopy}
       title={label}
       aria-label={label}
-      className={`inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 text-[11px] text-slate-300 transition-colors hover:border-[#00e5ff]/30 hover:bg-[#00e5ff]/10 hover:text-[#00e5ff] ${iconOnly ? "p-2" : "px-2.5 py-1.5"} ${className}`}
+      className={`${ADMIN_BTN_SECONDARY} ${iconOnly ? "p-2" : "px-2.5 py-1.5 text-[11px]"} ${copied ? "border-emerald-300 bg-emerald-50 text-emerald-800" : ""} ${className}`}
     >
       {copied ? (
         <>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5 text-emerald-400">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5 text-emerald-600">
             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
           </svg>
           {!iconOnly && "Kopyalandı"}

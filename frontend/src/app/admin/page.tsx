@@ -11,6 +11,8 @@ import { apiFetch } from "@/lib/api";
 import { formatTRY } from "@/lib/format";
 import type { AdminDashboard, Order, Product } from "@/types";
 import { isPendingOrder, isTodayOrder, formatAdminDate, ORDER_STATUS_LABEL, ORDER_STATUS_STYLE } from "@/lib/admin-order-utils";
+import { getOrderPriceBreakdown } from "@/lib/admin-order-pricing";
+import { ADMIN_BTN_LINK } from "@/lib/admin-form-styles";
 import { PRODUCT_STATUS_LABEL, PRODUCT_STATUS_STYLE, getProductSaleStatus } from "@/lib/admin-product-status";
 
 type DetailPanel = "today" | "pending" | "low_stock" | null;
@@ -36,7 +38,7 @@ const STATUS_CHART: Record<string, string> = {
 };
 
 const CHART_TICK = { fill: "#475569", fontSize: 10, fontWeight: 400 };
-const GRID_STROKE = "rgba(148,163,184,0.06)";
+const GRID_STROKE = "rgba(148,163,184,0.12)";
 
 function StatCard({
   label, value, sub, accent, active, onClick,
@@ -52,9 +54,9 @@ function StatCard({
       disabled={!clickable}
       className={`flex flex-col justify-between rounded-2xl border p-5 text-left transition-all duration-300 ${
         active
-          ? "border-[#c9b08a]/30 bg-gradient-to-br from-[#1e1a18]/80 to-[#141820] shadow-[inset_0_1px_0_rgba(201,176,138,0.08)]"
-          : "border-white/[0.06] bg-[#141820]/90"
-      } ${clickable ? "cursor-pointer hover:border-white/10 hover:bg-[#181c24]" : "cursor-default"}`}
+          ? "border-[#c9b08a]/40 bg-gradient-to-br from-[#fdf8f3] to-white shadow-[0_2px_12px_rgba(201,176,138,0.12)]"
+          : "border-black/[0.06] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
+      } ${clickable ? "cursor-pointer hover:border-slate-200 hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)]" : "cursor-default"}`}
     >
       <div className="flex items-center justify-between">
         <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-slate-500">{label}</p>
@@ -72,12 +74,12 @@ function StatCard({
   );
 }
 
-const cardCls = "rounded-2xl border border-white/[0.06] bg-[#141820]/90 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]";
+const cardCls = "rounded-2xl border border-black/[0.06] bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]";
 
 function ChartTitle({ title, sub }: { title: string; sub?: string }) {
   return (
     <div className="mb-5">
-      <p className="text-[12px] font-medium tracking-wide text-slate-200">{title}</p>
+      <p className="text-[12px] font-medium tracking-wide text-slate-800">{title}</p>
       {sub && <p className="mt-1 text-[10px] text-slate-600">{sub}</p>}
     </div>
   );
@@ -92,9 +94,9 @@ function ChartTooltip({ active, payload, label, valueFormatter }: {
   if (!active || !payload?.length) return null;
   const val = payload[0].value;
   return (
-    <div className="rounded-lg border border-white/10 bg-[#0f1318]/95 px-3 py-2 shadow-xl backdrop-blur-sm">
+    <div className="rounded-lg border border-black/[0.06] bg-white px-3 py-2 shadow-lg">
       {label && <p className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">{label}</p>}
-      <p className="text-[13px] font-medium tabular-nums text-[#e8dcc8]">
+      <p className="text-[13px] font-medium tabular-nums text-[#7c6a56]">
         {valueFormatter ? valueFormatter(val) : val}
       </p>
     </div>
@@ -186,7 +188,7 @@ export default function AdminDashboardPage() {
   if (!data) {
     return (
       <div className="flex items-center justify-center py-32">
-        <div className="h-5 w-5 animate-spin rounded-full border border-slate-700 border-t-[#c9b08a]" />
+        <div className="h-5 w-5 animate-spin rounded-full border border-slate-200 border-t-[#c9b08a]" />
       </div>
     );
   }
@@ -268,7 +270,7 @@ export default function AdminDashboardPage() {
               <XAxis dataKey="date" tick={CHART_TICK} tickLine={false} axisLine={false} dy={8} />
               <YAxis tick={CHART_TICK} tickLine={false} axisLine={false} allowDecimals={false} width={28} />
               <Tooltip content={<ChartTooltip valueFormatter={(v) => `${v} sipariş`} />} cursor={{ stroke: "rgba(201,176,138,0.15)", strokeWidth: 1 }} />
-              <Area type="monotone" dataKey="count" stroke={ACCENT.champagne} strokeWidth={1.5} fill="url(#trendFill)" dot={false} activeDot={{ r: 3, fill: ACCENT.champagne, stroke: "#141820", strokeWidth: 2 }} />
+              <Area type="monotone" dataKey="count" stroke={ACCENT.champagne} strokeWidth={1.5} fill="url(#trendFill)" dot={false} activeDot={{ r: 3, fill: ACCENT.champagne, stroke: "#ffffff", strokeWidth: 2 }} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -282,7 +284,7 @@ export default function AdminDashboardPage() {
               <BarChart data={topProducts} layout="vertical" margin={{ top: 0, right: 12, left: 0, bottom: 0 }} barCategoryGap="28%">
                 <XAxis type="number" tick={CHART_TICK} tickLine={false} axisLine={false} />
                 <YAxis dataKey="name" type="category" width={72} tick={{ ...CHART_TICK, fontSize: 9 }} tickLine={false} axisLine={false} />
-                <Tooltip content={<ChartTooltip valueFormatter={(v) => `${v} adet`} />} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+                <Tooltip content={<ChartTooltip valueFormatter={(v) => `${v} adet`} />} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
                 <Bar dataKey="qty" radius={[0, 3, 3, 0]} barSize={10}>
                   {topProducts.map((_, i) => (
                     <Cell key={i} fill={`rgba(201,176,138,${0.25 + (topProducts.length - i) * 0.12})`} />
@@ -320,10 +322,10 @@ export default function AdminDashboardPage() {
                 </ResponsiveContainer>
                 <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
                   <span className="text-[10px] uppercase tracking-widest text-slate-600">Toplam</span>
-                  <span className="text-xl font-light tabular-nums text-[#e8dcc8]">{statusTotal}</span>
+                  <span className="text-xl font-light tabular-nums text-[#9e4a5a]">{statusTotal}</span>
                 </div>
               </div>
-              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 border-t border-white/[0.04] pt-3">
+              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 border-t border-black/[0.04] pt-3">
                 {statusMix.map((s) => (
                   <span key={s.name} className="flex items-center gap-1.5 text-[10px] text-slate-500">
                     <span className="h-1.5 w-1.5 rounded-full" style={{ background: s.fill }} />
@@ -349,7 +351,7 @@ export default function AdminDashboardPage() {
                 <CartesianGrid stroke={GRID_STROKE} vertical={false} />
                 <XAxis dataKey="name" tick={{ ...CHART_TICK, fontSize: 9 }} tickLine={false} axisLine={false} interval={0} angle={-20} textAnchor="end" height={40} />
                 <YAxis tick={CHART_TICK} tickLine={false} axisLine={false} width={28} />
-                <Tooltip content={<ChartTooltip valueFormatter={(v) => `${v} adet`} />} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+                <Tooltip content={<ChartTooltip valueFormatter={(v) => `${v} adet`} />} cursor={{ fill: "rgba(0,0,0,0.03)" }} />
                 <Bar dataKey="stock" fill={ACCENT.amber} fillOpacity={0.55} radius={[3, 3, 0, 0]} barSize={20} />
               </BarChart>
             </ResponsiveContainer>
@@ -370,7 +372,7 @@ export default function AdminDashboardPage() {
               <XAxis dataKey="date" tick={CHART_TICK} tickLine={false} axisLine={false} dy={8} />
               <YAxis tick={{ ...CHART_TICK, fontSize: 9 }} tickLine={false} axisLine={false} width={36} tickFormatter={(v) => `₺${Math.round(Number(v) / 100)}`} />
               <Tooltip content={<ChartTooltip valueFormatter={(v) => `₺${(v / 100).toLocaleString("tr-TR", { minimumFractionDigits: 2 })}`} />} cursor={{ stroke: "rgba(158,74,90,0.15)", strokeWidth: 1 }} />
-              <Area type="monotone" dataKey="revenue" stroke={ACCENT.wine} strokeWidth={1.5} fill="url(#revFill)" dot={false} activeDot={{ r: 3, fill: ACCENT.wine, stroke: "#141820", strokeWidth: 2 }} />
+              <Area type="monotone" dataKey="revenue" stroke={ACCENT.wine} strokeWidth={1.5} fill="url(#revFill)" dot={false} activeDot={{ r: 3, fill: ACCENT.wine, stroke: "#ffffff", strokeWidth: 2 }} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -378,30 +380,35 @@ export default function AdminDashboardPage() {
         <div className={cardCls}>
           <div className="mb-5 flex items-center justify-between">
             <div>
-              <p className="text-[12px] font-medium tracking-wide text-slate-200">Son Siparişler</p>
+              <p className="text-[12px] font-medium tracking-wide text-slate-800">Son Siparişler</p>
               <p className="mt-1 text-[10px] text-slate-600">Son hareketler</p>
             </div>
-            <Link href="/admin/orders" className="text-[10px] uppercase tracking-wider text-[#c9b08a]/80 transition-colors hover:text-[#c9b08a]">
+            <Link href="/admin/orders" className={ADMIN_BTN_LINK}>
               Tümünü Gör
             </Link>
           </div>
           <div className="space-y-1.5">
-            {data.recent_orders.slice(0, 5).map((order) => (
+            {data.recent_orders.slice(0, 5).map((order) => {
+              const pricing = getOrderPriceBreakdown(order);
+              return (
               <Link
                 key={order.id}
                 href="/admin/orders"
-                className="flex items-center justify-between rounded-xl px-3 py-2.5 transition-colors hover:bg-white/[0.03]"
+                className="flex items-center justify-between rounded-xl px-3 py-2.5 transition-colors hover:bg-slate-50"
               >
                 <div>
-                  <p className="text-[11px] font-medium tracking-wide text-slate-300">#{order.id.slice(0, 8).toUpperCase()}</p>
+                  <p className="text-[11px] font-medium tracking-wide text-slate-700">#{order.id.slice(0, 8).toUpperCase()}</p>
                   <p className="mt-0.5 max-w-[130px] truncate text-[10px] text-slate-600">{order.guest_email}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[11px] tabular-nums text-[#c9b08a]">{formatTRY(order.total_try)}</p>
+                  <p className="text-[11px] tabular-nums text-[#c9b08a]">{formatTRY(pricing.totalTry)}</p>
+                  {order.gift_wrap && (
+                    <p className="text-[9px] text-[#9e4a5a]">+ paket {formatTRY(pricing.giftWrapTry)}</p>
+                  )}
                   <StatusBadge status={order.status} />
                 </div>
               </Link>
-            ))}
+            );})}
           </div>
         </div>
       </div>
@@ -422,10 +429,10 @@ function PanelHeader({ title, count, href }: { title: string; count: number; hre
   return (
     <div className="mb-4 flex items-center justify-between">
       <div>
-        <p className="text-sm font-medium text-slate-200">{title}</p>
+        <p className="text-sm font-medium text-slate-800">{title}</p>
         <p className="text-[11px] text-slate-600">{count} sipariş</p>
       </div>
-      <Link href={href} className="text-[10px] uppercase tracking-wider text-[#c9b08a]/80 hover:text-[#c9b08a]">Tümünü Gör →</Link>
+      <Link href={href} className={ADMIN_BTN_LINK}>Tümünü Gör →</Link>
     </div>
   );
 }
@@ -435,15 +442,19 @@ function EmptyPanel({ message }: { message: string }) {
 }
 
 function OrderRow({ order }: { order: Order }) {
-  const sc = ORDER_STATUS_STYLE[order.status] ?? { bg: "bg-slate-700/40", text: "text-slate-400" };
+  const sc = ORDER_STATUS_STYLE[order.status] ?? { bg: "bg-slate-50 border-slate-200", text: "text-slate-600" };
+  const pricing = getOrderPriceBreakdown(order);
   return (
-    <Link href={`/admin/orders?filter=${order.status}`} className="flex items-center justify-between rounded-xl px-4 py-3 transition-colors hover:bg-white/[0.03]">
+    <Link href={`/admin/orders?filter=${order.status}`} className="flex items-center justify-between rounded-xl px-4 py-3 transition-colors hover:bg-slate-50">
       <div>
-        <p className="text-[12px] font-medium text-slate-200">#{order.id.slice(0, 8).toUpperCase()}</p>
+        <p className="text-[12px] font-medium text-slate-800">#{order.id.slice(0, 8).toUpperCase()}</p>
         <p className="text-[10px] text-slate-600">{order.shipping_address.full_name} · {formatAdminDate(order.created_at)}</p>
       </div>
       <div className="text-right">
-        <p className="text-[12px] tabular-nums text-[#c9b08a]">{formatTRY(order.total_try)}</p>
+        <p className="text-[12px] tabular-nums text-[#c9b08a]">{formatTRY(pricing.totalTry)}</p>
+        {order.gift_wrap && (
+          <p className="text-[9px] text-[#9e4a5a]">+ paket {formatTRY(pricing.giftWrapTry)}</p>
+        )}
         <span className={`text-[9px] uppercase tracking-wider ${sc.text}`}>{ORDER_STATUS_LABEL[order.status] ?? order.status}</span>
       </div>
     </Link>
@@ -453,9 +464,9 @@ function OrderRow({ order }: { order: Order }) {
 function LowStockRow({ name, stock, threshold, status }: { name: string; stock: number; threshold: number; status: keyof typeof PRODUCT_STATUS_LABEL }) {
   const sc = PRODUCT_STATUS_STYLE[status] ?? PRODUCT_STATUS_STYLE.low_stock;
   return (
-    <div className="flex items-center justify-between rounded-xl px-4 py-3 hover:bg-white/[0.02]">
+    <div className="flex items-center justify-between rounded-xl px-4 py-3 hover:bg-slate-50">
       <div>
-        <p className="text-[12px] font-medium text-slate-200">{name}</p>
+        <p className="text-[12px] font-medium text-slate-800">{name}</p>
         <p className="text-[10px] text-slate-600">Stok: {stock} · Eşik: ≤{threshold}</p>
       </div>
       <span className={`text-[9px] uppercase tracking-wider ${sc.text}`}>{PRODUCT_STATUS_LABEL[status]}</span>

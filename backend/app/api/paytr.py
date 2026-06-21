@@ -1,15 +1,35 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import PlainTextResponse
 from google.cloud.firestore_v1 import FieldFilter
 
+from app.core.client_ip import get_client_ip
 from app.core.firebase import get_db
-from app.models.schemas import PayTRTokenRequest, PayTRTokenResponse
-from app.services.paytr import PAYTR_IFRAME_URL, create_payment_token, verify_callback_hash
+from app.models.schemas import PayTRStatusResponse, PayTRTokenRequest, PayTRTokenResponse
+from app.services.paytr import (
+    PAYTR_IFRAME_URL,
+    create_payment_token,
+    get_paytr_callback_url,
+    get_paytr_mode,
+    is_paytr_configured,
+    verify_callback_hash,
+)
 from app.api.orders import process_payment_success
+from app.core.config import settings
 
 router = APIRouter(prefix="/payment/paytr", tags=["payment"])
+
+
+@router.get("/status", response_model=PayTRStatusResponse)
+async def paytr_status():
+    """Check PayTR configuration — safe to expose (no secrets)."""
+    mode = get_paytr_mode()
+    return PayTRStatusResponse(
+        mode=mode,
+        configured=is_paytr_configured(),
+        test_mode=settings.paytr_test_mode,
+        callback_url=get_paytr_callback_url(),
+        allow_dev_mock=settings.paytr_allow_dev_mock,
+    )
 
 
 @router.post("/token", response_model=PayTRTokenResponse)
@@ -30,13 +50,12 @@ async def get_paytr_token(body: PayTRTokenRequest, request: Request):
         basket.append([item["name_tr"], f"{price_tl:.2f}", item["quantity"]])
 
     if data.get("gift_wrap"):
-        from app.core.config import settings
         basket.append(["Hediye Paketi", f"{settings.gift_wrap_price_try / 100:.2f}", 1])
 
     if data.get("shipping_try", 0) > 0:
         basket.append(["Kargo", f"{data['shipping_try'] / 100:.2f}", 1])
 
-    user_ip = data.get("client_ip") or (request.client.host if request.client else "127.0.0.1")
+    user_ip = data.get("client_ip") or get_client_ip(request)
 
     try:
         result = await create_payment_token(
@@ -54,11 +73,19 @@ async def get_paytr_token(body: PayTRTokenRequest, request: Request):
         raise HTTPException(400, str(exc)) from exc
 
     token = result["token"]
-    return PayTRTokenResponse(token=token, iframe_url=f"{PAYTR_IFRAME_URL}/{token}")
+    return PayTRTokenResponse(
+        token=token,
+        iframe_url=f"{PAYTR_IFRAME_URL}/{token}",
+        test_mode=bool(result.get("test_mode")),
+        dev_mock=bool(result.get("dev_mock")),
+    )
 
 
 @router.post("/callback")
 async def paytr_callback(request: Request):
+    if not is_paytr_configured():
+        return PlainTextResponse("PAYTR not configured", status_code=503)
+
     form = await request.form()
     merchant_oid = form.get("merchant_oid", "")
     status = form.get("status", "")
@@ -84,7 +111,6 @@ async def paytr_callback(request: Request):
     if not order_id:
         return PlainTextResponse("OK")
 
-    # Log callback
     db.collection("orders").document(order_id).collection("paytr_callbacks").add(
         {
             "merchant_oid": merchant_oid,

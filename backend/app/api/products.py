@@ -27,6 +27,7 @@ async def list_products(
     type: ProductType | None = None,
     category_id: str | None = None,
     featured: bool | None = None,
+    tag: str | None = None,
     limit: int = Query(default=50, le=100),
 ):
     db = get_db()
@@ -41,6 +42,8 @@ async def list_products(
 
     docs = query.limit(limit).stream()
     products = [_serialize_product(doc_to_dict(d)) for d in docs]
+    if tag:
+        products = [p for p in products if tag in (p.tags or [])]
     products.sort(key=lambda p: p.created_at or utc_now(), reverse=True)
     return products
 

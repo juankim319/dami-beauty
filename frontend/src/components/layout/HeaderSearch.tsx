@@ -24,6 +24,7 @@ export function HeaderSearch() {
   const [products, setProducts] = useState<Product[]>([]);
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [placeholderIdx, setPlaceholderIdx] = useState(0);
 
   useEffect(() => {
@@ -57,16 +58,18 @@ export function HeaderSearch() {
   }, [placeholders.length, open, query]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open && !mobileOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setOpen(false);
+        setMobileOpen(false);
         inputRef.current?.blur();
       }
     };
     const onClick = (e: MouseEvent) => {
       if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
         setOpen(false);
+        setMobileOpen(false);
       }
     };
     document.addEventListener("keydown", onKey);
@@ -75,13 +78,14 @@ export function HeaderSearch() {
       document.removeEventListener("keydown", onKey);
       document.removeEventListener("mousedown", onClick);
     };
-  }, [open]);
+  }, [open, mobileOpen]);
 
   const goSearch = useCallback(
     (term: string) => {
       const q = term.trim();
       if (!q) return;
       setOpen(false);
+      setMobileOpen(false);
       setQuery("");
       router.push(`/products?q=${encodeURIComponent(q)}`);
     },
@@ -137,6 +141,7 @@ export function HeaderSearch() {
                   href={`/products/${p.slug}`}
                   onClick={() => {
                     setOpen(false);
+                    setMobileOpen(false);
                     setQuery("");
                   }}
                   className="flex items-center gap-3 rounded-lg px-2 py-2 transition-colors hover:bg-dami-50"
@@ -171,36 +176,152 @@ export function HeaderSearch() {
   );
 
   const inputClasses =
-    "w-full rounded-full border border-dami-200 bg-white/80 py-2 pl-9 pr-3 text-[12px] text-dami-800 placeholder:text-dami-400 outline-none transition-all focus:border-brand/40 focus:bg-white focus:ring-2 focus:ring-brand/10";
+    "rounded-full border border-dami-200 bg-white/80 py-2 pl-9 pr-3 text-[12px] text-dami-800 placeholder:text-dami-400 outline-none transition-all focus:border-brand/40 focus:bg-white focus:ring-2 focus:ring-brand/10";
 
   return (
-    <div ref={rootRef} className="relative min-w-0 flex-1 sm:max-w-xs md:max-w-sm lg:max-w-md">
-      <form onSubmit={handleSubmit}>
-        <div className="relative">
-          <svg
-            className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-dami-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-          <input
-            ref={inputRef}
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => setOpen(true)}
-            placeholder={open && !query ? t.search.placeholderActive : `"${rotatingPlaceholder}"`}
-            className={inputClasses}
+    <>
+      {/* Desktop: compact inline search — does not cover centered logo */}
+      <div ref={rootRef} className="relative hidden sm:block">
+        <form onSubmit={handleSubmit}>
+          <div className="relative">
+            <svg
+              className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-dami-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              ref={inputRef}
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => setOpen(true)}
+              placeholder={open && !query ? t.search.placeholderActive : `"${rotatingPlaceholder}"`}
+              className={`${inputClasses} w-36 md:w-44 lg:w-52`}
+              aria-label={t.search.ariaLabel}
+              aria-autocomplete="list"
+              autoComplete="off"
+            />
+          </div>
+        </form>
+        {dropdown}
+      </div>
+
+      {/* Mobile: icon only — logo stays visible */}
+      <div className="relative sm:hidden">
+        {!mobileOpen ? (
+          <button
+            type="button"
+            onClick={() => {
+              setMobileOpen(true);
+              setOpen(true);
+              setTimeout(() => inputRef.current?.focus(), 50);
+            }}
+            className="flex h-8 w-8 items-center justify-center text-dami-700 transition-colors hover:text-dami-900"
             aria-label={t.search.ariaLabel}
-            aria-autocomplete="list"
-            autoComplete="off"
-          />
-        </div>
-      </form>
-      {dropdown}
-    </div>
+          >
+            <svg className="h-[18px] w-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        ) : (
+          <div
+            ref={rootRef}
+            className="fixed inset-x-0 top-0 z-[70] border-b border-dami-200/80 bg-[#FDFAF9]/98 px-4 pb-3 pt-3 backdrop-blur-md"
+          >
+            <form onSubmit={handleSubmit} className="flex items-center gap-2">
+              <div className="relative min-w-0 flex-1">
+                <svg
+                  className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-dami-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  ref={inputRef}
+                  type="search"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onFocus={() => setOpen(true)}
+                  placeholder={query ? t.search.placeholderActive : `"${rotatingPlaceholder}"`}
+                  className={`${inputClasses} w-full`}
+                  aria-label={t.search.ariaLabel}
+                  autoComplete="off"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileOpen(false);
+                  setOpen(false);
+                  setQuery("");
+                }}
+                className="shrink-0 px-2 py-1.5 text-[11px] font-medium uppercase tracking-wider text-dami-500"
+              >
+                {t.search.close}
+              </button>
+            </form>
+            {open && (
+              <div className="mt-2 max-h-[60vh] overflow-y-auto rounded-xl border border-dami-200 bg-white shadow-lg">
+                {hasQuery && relatedTerms.length > 0 && (
+                  <div className="border-b border-dami-100 px-3 py-2">
+                    <p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-dami-400">
+                      {t.search.related}
+                    </p>
+                    {relatedTerms.map((term) => (
+                      <button
+                        key={term}
+                        type="button"
+                        onClick={() => goSearch(term)}
+                        className="block w-full truncate rounded-lg px-2 py-2 text-left text-[13px] text-dami-800 hover:bg-dami-50"
+                      >
+                        {term}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <div className="px-3 py-2">
+                  <p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-dami-400">
+                    {hasQuery ? t.search.results : t.search.recommended}
+                  </p>
+                  {matched.length === 0 ? (
+                    <p className="py-4 text-center text-[12px] text-dami-400">{t.search.noResults}</p>
+                  ) : (
+                    matched.map((p) => (
+                      <Link
+                        key={p.id}
+                        href={`/products/${p.slug}`}
+                        onClick={() => {
+                          setMobileOpen(false);
+                          setOpen(false);
+                          setQuery("");
+                        }}
+                        className="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-dami-50"
+                      >
+                        <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md bg-dami-100">
+                          {p.images[0] && (
+                            <Image src={p.images[0]} alt="" fill className="object-cover" sizes="40px" />
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-[12px] font-medium text-dami-800">{p.name_tr}</p>
+                          <p className="text-[11px] text-dami-400">{formatTRY(productMinPrice(p))}</p>
+                        </div>
+                      </Link>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </>
   );
 }

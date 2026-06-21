@@ -149,6 +149,19 @@ export function ProductDetailClient({ product }: Props) {
 
             <div className="mt-10 border-t border-dami-200 pt-8 dark:border-dami-800">
               <p className="text-sm leading-relaxed text-dami-600 dark:text-dami-300">{product.description_tr}</p>
+              {product.tags && product.tags.length > 0 && (
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {product.tags.map((tag) => (
+                    <Link
+                      key={tag}
+                      href={`/products?tag=${encodeURIComponent(tag)}`}
+                      className="rounded-full bg-[#9e4a5a]/10 px-3 py-1 text-[10px] font-medium text-[#9e4a5a] transition-colors hover:bg-[#9e4a5a]/20"
+                    >
+                      #{tag}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

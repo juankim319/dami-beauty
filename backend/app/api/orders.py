@@ -17,7 +17,7 @@ from app.services.email import send_order_confirmation_email
 from app.services.inventory import decrement_stock, increment_stock
 from app.services.paytr import generate_merchant_oid
 from app.services.pricing import calculate_order_totals
-from app.services.audit import log_admin_action
+from app.core.client_ip import get_client_ip
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
@@ -97,7 +97,7 @@ async def create_order(
         "notes": None,
         "created_at": now,
         "paid_at": None,
-        "client_ip": request.client.host if request.client else "127.0.0.1",
+        "client_ip": get_client_ip(request),
     }
 
     db = get_db()

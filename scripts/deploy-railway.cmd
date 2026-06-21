@@ -33,7 +33,7 @@ echo.
 echo Step 3: Set environment variables...
 for /f "delims=" %%i in ('python -c "import json;print(json.dumps(json.load(open('service-account-dev.json'))))"') do set SA_JSON=%%i
 
-call npx.cmd @railway/cli variables set APP_ENV=production DEBUG=false USE_MOCK_DB=false FIREBASE_PROJECT_ID=dami-beauty-353b0 CORS_ALLOW_VERCEL=true PAYTR_TEST_MODE=true
+call npx.cmd @railway/cli variables set APP_ENV=production DEBUG=false USE_MOCK_DB=false FIREBASE_PROJECT_ID=dami-beauty-353b0 CORS_ALLOW_VERCEL=true PAYTR_TEST_MODE=true PAYTR_ALLOW_DEV_MOCK=false BACKEND_URL=https://dami-beauty-api-production.up.railway.app FRONTEND_URL=https://dami-beauty.vercel.app
 call npx.cmd @railway/cli variables set FIREBASE_SERVICE_ACCOUNT_JSON="!SA_JSON!"
 
 echo.

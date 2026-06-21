@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AdminAuthProvider, useAdminAuth } from "@/contexts/AdminAuthContext";
+import { ADMIN_BTN_LINK, ADMIN_BTN_ICON } from "@/lib/admin-form-styles";
+import "./admin.css";
 
 const NAV_ITEMS = [
   {
@@ -74,13 +76,13 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 
   if (loading && !isLoginPage) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-[#0d1117]">
+      <div className="flex min-h-dvh items-center justify-center bg-[#FDFAF9]">
         <div className="flex items-center gap-3">
-          <svg className="h-5 w-5 animate-spin text-[#00e5ff]" viewBox="0 0 24 24" fill="none">
+          <svg className="h-5 w-5 animate-spin text-[#9e4a5a]" viewBox="0 0 24 24" fill="none">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
           </svg>
-          <span className="text-sm text-slate-400">Yükleniyor...</span>
+          <span className="text-sm text-slate-500">Yükleniyor...</span>
         </div>
       </div>
     );
@@ -90,8 +92,8 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 
   if (!user || !isAdmin) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-[#0d1117]">
-        <p className="text-slate-400 text-sm">Yönlendiriliyor...</p>
+      <div className="flex min-h-dvh items-center justify-center bg-[#FDFAF9]">
+        <p className="text-slate-500 text-sm">Yönlendiriliyor...</p>
       </div>
     );
   }
@@ -101,28 +103,28 @@ function AdminShell({ children }: { children: React.ReactNode }) {
   )?.label ?? "Kontrol Paneli";
 
   return (
-    <div className="flex min-h-dvh bg-[#0d1117] text-slate-100">
+    <div className="admin-panel flex min-h-dvh bg-[#FDFAF9] text-slate-800">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-20 bg-black/60 md:hidden"
+          className="fixed inset-0 z-20 bg-black/20 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-30 flex h-full w-56 flex-col bg-[#131920] transition-transform duration-200 md:static md:translate-x-0 ${
+        className={`fixed left-0 top-0 z-30 flex h-full w-56 flex-col border-r border-black/[0.06] bg-white shadow-[1px_0_8px_rgba(0,0,0,0.03)] transition-transform duration-200 md:static md:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Logo */}
-        <div className="flex h-14 items-center gap-2.5 border-b border-white/5 px-5">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[#00e5ff] to-[#7c3aed]">
+        <div className="flex h-14 items-center gap-2.5 border-b border-black/[0.06] px-5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-[#c9b08a] to-[#9e4a5a]">
             <span className="text-[10px] font-bold text-white">D</span>
           </div>
           <div>
-            <p className="text-[12px] font-bold tracking-wide text-white">Dami Beauty</p>
+            <p className="text-[12px] font-bold tracking-wide text-slate-800">Dami Beauty</p>
             <p className="text-[9px] text-slate-500">Yönetim Paneli</p>
           </div>
         </div>
@@ -138,13 +140,13 @@ function AdminShell({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-medium transition-colors ${
+                className={`flex items-center gap-3 rounded-lg border px-3 py-2.5 text-[13px] font-medium transition-all duration-200 ${
                   active
-                    ? "bg-[#00e5ff]/10 text-[#00e5ff]"
-                    : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                    ? "border-[#853646] bg-[#9e4a5a] text-white shadow-[0_2px_8px_rgba(158,74,90,0.2)]"
+                    : "border-transparent text-slate-600 hover:border-slate-200 hover:bg-white hover:text-slate-800 hover:shadow-[0_1px_4px_rgba(15,23,42,0.06)]"
                 }`}
               >
-                <span className={active ? "text-[#00e5ff]" : "text-slate-500"}>{item.icon}</span>
+                <span className={active ? "text-white" : "text-slate-400"}>{item.icon}</span>
                 {item.label}
               </Link>
             );
@@ -152,12 +154,12 @@ function AdminShell({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* User + logout */}
-        <div className="border-t border-white/5 px-4 py-4">
+        <div className="border-t border-black/[0.06] px-4 py-4">
           <p className="truncate text-[11px] text-slate-500">{user?.email}</p>
           <button
             type="button"
             onClick={() => logout()}
-            className="mt-2 flex items-center gap-1.5 text-[12px] text-slate-500 hover:text-red-400 transition-colors"
+            className={`${ADMIN_BTN_LINK} mt-2 w-full justify-start normal-case tracking-normal text-slate-500 hover:text-red-600`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -170,25 +172,25 @@ function AdminShell({ children }: { children: React.ReactNode }) {
       {/* Main area */}
       <div className="flex flex-1 flex-col min-w-0">
         {/* Top bar */}
-        <header className="flex h-14 items-center justify-between border-b border-white/5 bg-[#131920] px-5">
+        <header className="flex h-14 items-center justify-between border-b border-black/[0.06] bg-white/80 px-5 backdrop-blur-sm">
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(true)}
-              className="mr-1 text-slate-400 hover:text-white md:hidden"
-            >
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            className={`${ADMIN_BTN_ICON} mr-1 md:hidden`}
+          >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
             <div>
-              <h1 className="text-[14px] font-semibold text-white">{currentLabel}</h1>
+              <h1 className="text-[14px] font-semibold text-slate-800">{currentLabel}</h1>
               <p className="text-[11px] text-slate-500">Genel durum (önizleme dahil)</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] text-slate-400 sm:flex">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span className="hidden items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] text-emerald-700 sm:flex">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
               Canlı
             </span>
             <span className="hidden text-[11px] text-slate-500 sm:block">Türkçe</span>

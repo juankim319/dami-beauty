@@ -13,12 +13,14 @@ import {
   getProductStock,
   getProductThreshold,
 } from "@/lib/admin-product-status";
+import { ADMIN_INPUT, ADMIN_OPTION, ADMIN_SELECT, ADMIN_LABEL, ADMIN_CARD, ADMIN_BTN_PRIMARY, ADMIN_BTN_SECONDARY, ADMIN_BTN_DANGER, ADMIN_BTN_ICON, ADMIN_BADGE, ADMIN_PILL, ADMIN_FILTER_ACTIVE, ADMIN_FILTER_IDLE } from "@/lib/admin-form-styles";
 import type { Product, ProductType } from "@/types";
 import { getMessages } from "@/lib/i18n";
 
-const CARD = "rounded-xl border border-white/5 bg-[#1a2332] p-5";
-const INPUT = "w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-slate-200 placeholder-slate-500 outline-none focus:border-[#00e5ff]/50";
-const LABEL = "block text-[11px] font-semibold uppercase tracking-widest text-slate-400 mb-1";
+const CARD = ADMIN_CARD;
+const INPUT = ADMIN_INPUT;
+const SELECT = ADMIN_SELECT;
+const LABEL = ADMIN_LABEL;
 
 type StatusFilter = "all" | ProductSaleStatus;
 type ProductForm = {
@@ -30,6 +32,11 @@ type ProductForm = {
   stock: number;
   low_stock_threshold: number;
   sale_status: ProductSaleStatus;
+  stockInput: string;
+  thresholdInput: string;
+  priceInput: string;
+  tags: string[];
+  tagInput: string;
 };
 
 const EMPTY_FORM: ProductForm = {
@@ -41,6 +48,11 @@ const EMPTY_FORM: ProductForm = {
   stock: 10,
   low_stock_threshold: 5,
   sale_status: "on_sale",
+  stockInput: "10",
+  thresholdInput: "5",
+  priceInput: "",
+  tags: [],
+  tagInput: "",
 };
 
 const STATUS_FILTERS: { key: StatusFilter; label: string }[] = [
@@ -52,16 +64,38 @@ const STATUS_FILTERS: { key: StatusFilter; label: string }[] = [
 ];
 
 function productToForm(p: Product): ProductForm {
+  const stock = getProductStock(p);
+  const threshold = getProductThreshold(p);
+  const price = p.base_price_try / 100;
   return {
     name_tr: p.name_tr,
     slug: p.slug,
     type: p.type,
     description_tr: p.description_tr,
-    base_price_try: p.base_price_try / 100,
-    stock: getProductStock(p),
-    low_stock_threshold: getProductThreshold(p),
+    base_price_try: price,
+    stock,
+    low_stock_threshold: threshold,
     sale_status: getProductSaleStatus(p),
+    stockInput: String(stock),
+    thresholdInput: String(threshold),
+    priceInput: price > 0 ? String(price) : "",
+    tags: p.tags ?? [],
+    tagInput: "",
   };
+}
+
+function parseNonNegativeInt(raw: string, fallback = 0) {
+  const trimmed = raw.trim();
+  if (trimmed === "") return fallback;
+  const n = Number.parseInt(trimmed, 10);
+  if (Number.isNaN(n) || n < 0) return fallback;
+  return n;
+}
+
+function saleStatusFromStock(stock: number, threshold: number): ProductSaleStatus {
+  if (stock <= 0) return "out_of_stock";
+  if (stock <= threshold) return "low_stock";
+  return "on_sale";
 }
 
 export default function AdminProductsPage() {
@@ -132,6 +166,18 @@ export default function AdminProductsPage() {
 
   const buildPayload = (f: ProductForm, existing?: Product) => {
     const priceKurus = Math.round(f.base_price_try * 100);
+    const stock = f.stock;
+    const threshold = f.low_stock_threshold;
+
+    let saleStatus = f.sale_status;
+    if (saleStatus !== "hidden") {
+      if (stock <= 0) {
+        saleStatus = "out_of_stock";
+      } else if (saleStatus === "out_of_stock") {
+        saleStatus = saleStatusFromStock(stock, threshold);
+      }
+    }
+
     const statusPatch = buildProductUpdateFromStatus(
       existing ?? {
         id: "",
@@ -141,28 +187,25 @@ export default function AdminProductsPage() {
         description_tr: f.description_tr,
         images: [],
         base_price_try: priceKurus,
-        variants: [{ sku: `${f.slug || "SKU"}-001`, options: {}, price_try: priceKurus, stock: f.stock, low_stock_threshold: f.low_stock_threshold }],
+        variants: [{ sku: `${f.slug || "SKU"}-001`, options: {}, price_try: priceKurus, stock, low_stock_threshold: threshold }],
         is_featured: false,
         gift_wrap_available: true,
         active: true,
       },
-      f.sale_status
+      saleStatus
     );
 
     const variant = statusPatch.variants[0] ?? {
       sku: `${f.slug || "SKU"}-001`,
       options: {},
       price_try: priceKurus,
-      stock: f.stock,
-      low_stock_threshold: f.low_stock_threshold,
+      stock,
+      low_stock_threshold: threshold,
     };
 
-    variant.stock = f.stock;
-    variant.low_stock_threshold = f.low_stock_threshold;
+    variant.stock = saleStatus === "out_of_stock" ? 0 : stock;
+    variant.low_stock_threshold = threshold;
     variant.price_try = priceKurus;
-
-    if (f.sale_status === "out_of_stock") variant.stock = 0;
-    if (f.sale_status === "on_sale" && variant.stock <= 0) variant.stock = Math.max(f.stock, 1);
 
     return {
       name_tr: f.name_tr,
@@ -170,8 +213,9 @@ export default function AdminProductsPage() {
       type: f.type,
       description_tr: f.description_tr,
       base_price_try: priceKurus,
-      active: f.sale_status === "hidden" ? false : true,
+      active: saleStatus === "hidden" ? false : true,
       variants: [variant],
+      tags: f.tags,
     };
   };
 
@@ -181,8 +225,22 @@ export default function AdminProductsPage() {
     setSaving(true);
     setError("");
     try {
+      const normalizedForm: ProductForm = {
+        ...form,
+        stock: parseNonNegativeInt(form.stockInput, form.stock),
+        low_stock_threshold: parseNonNegativeInt(form.thresholdInput, form.low_stock_threshold),
+        base_price_try: form.priceInput === "" ? form.base_price_try : Number.parseFloat(form.priceInput) || form.base_price_try,
+        sale_status:
+          form.sale_status === "hidden"
+            ? "hidden"
+            : saleStatusFromStock(
+                parseNonNegativeInt(form.stockInput, form.stock),
+                parseNonNegativeInt(form.thresholdInput, form.low_stock_threshold)
+              ),
+      };
+
       const existing = editingId ? products.find((p) => p.id === editingId) : undefined;
-      const payload = buildPayload(form, existing);
+      const payload = buildPayload(normalizedForm, existing);
 
       if (editingId) {
         await apiFetch(`/products/id/${editingId}`, {
@@ -236,7 +294,7 @@ export default function AdminProductsPage() {
         <button
           type="button"
           onClick={openCreate}
-          className="rounded-lg bg-[#00e5ff]/10 px-4 py-2 text-[12px] font-semibold text-[#00e5ff] ring-1 ring-[#00e5ff]/25 hover:bg-[#00e5ff]/20"
+          className={`${ADMIN_BTN_PRIMARY} text-[12px]`}
         >
           + Yeni Ürün Ekle
         </button>
@@ -251,8 +309,8 @@ export default function AdminProductsPage() {
             onClick={() => setFilter(key)}
             className={`rounded-full px-3 py-1 text-[12px] font-medium transition-colors ${
               filter === key
-                ? "bg-[#00e5ff]/15 text-[#00e5ff] ring-1 ring-[#00e5ff]/30"
-                : "bg-white/5 text-slate-400 hover:bg-white/10"
+                ? ADMIN_FILTER_ACTIVE
+                : ADMIN_FILTER_IDLE
             }`}
           >
             {label}
@@ -265,8 +323,8 @@ export default function AdminProductsPage() {
       {showForm && (
         <div className={CARD}>
           <div className="mb-4 flex items-center justify-between">
-            <p className="text-sm font-semibold text-white">{editingId ? "Ürünü Düzenle" : "Yeni Ürün Ekle"}</p>
-            <button type="button" onClick={closeForm} className="text-slate-500 hover:text-white">✕</button>
+            <p className="text-sm font-semibold text-slate-800">{editingId ? "Ürünü Düzenle" : "Yeni Ürün Ekle"}</p>
+            <button type="button" onClick={closeForm} className={ADMIN_BTN_ICON} aria-label="Kapat">✕</button>
           </div>
           <form onSubmit={handleSubmit} className="space-y-3">
             <div className="grid gap-3 sm:grid-cols-2">
@@ -276,31 +334,200 @@ export default function AdminProductsPage() {
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
                 <label className={LABEL}>Kategori</label>
-                <select className={INPUT} value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as ProductType })}>
-                  {productTypes.map((type) => <option key={type} value={type}>{t.productTypes[type]}</option>)}
+                <select className={SELECT} value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as ProductType })}>
+                  {productTypes.map((type) => (
+                    <option key={type} value={type} className={ADMIN_OPTION}>{t.productTypes[type]}</option>
+                  ))}
                 </select>
               </div>
               <div>
                 <label className={LABEL}>Satış Durumu *</label>
-                <select className={INPUT} value={form.sale_status} onChange={(e) => setForm({ ...form, sale_status: e.target.value as ProductSaleStatus })}>
+                <select
+                  className={SELECT}
+                  value={form.sale_status}
+                  onChange={(e) => {
+                    const sale_status = e.target.value as ProductSaleStatus;
+                    if (sale_status === "out_of_stock") {
+                      setForm({
+                        ...form,
+                        sale_status,
+                        stock: 0,
+                        stockInput: "0",
+                      });
+                      return;
+                    }
+                    if (sale_status === "hidden") {
+                      setForm({ ...form, sale_status });
+                      return;
+                    }
+                    const stock = form.stock > 0 ? form.stock : 1;
+                    setForm({
+                      ...form,
+                      sale_status,
+                      stock,
+                      stockInput: String(stock),
+                    });
+                  }}
+                >
                   {(Object.keys(PRODUCT_STATUS_LABEL) as ProductSaleStatus[]).map((s) => (
-                    <option key={s} value={s}>{PRODUCT_STATUS_LABEL[s]}</option>
+                    <option key={s} value={s} className={ADMIN_OPTION}>{PRODUCT_STATUS_LABEL[s]}</option>
                   ))}
                 </select>
               </div>
             </div>
             <div><label className={LABEL}>Açıklama</label><textarea className={`${INPUT} min-h-[80px]`} value={form.description_tr} onChange={(e) => setForm({ ...form, description_tr: e.target.value })} /></div>
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div><label className={LABEL}>Fiyat (₺) *</label><input className={INPUT} type="number" step="0.01" required value={form.base_price_try || ""} onChange={(e) => setForm({ ...form, base_price_try: parseFloat(e.target.value) || 0 })} /></div>
-              <div><label className={LABEL}>Stok</label><input className={INPUT} type="number" min={0} value={form.stock} onChange={(e) => setForm({ ...form, stock: parseInt(e.target.value) || 0 })} /></div>
-              <div><label className={LABEL}>Az Stok Eşiği</label><input className={INPUT} type="number" min={0} value={form.low_stock_threshold} onChange={(e) => setForm({ ...form, low_stock_threshold: parseInt(e.target.value) || 0 })} /></div>
+
+            {/* Hashtags */}
+            <div>
+              <label className={LABEL}>Etiketler (Hashtag)</label>
+              <div className="flex gap-2">
+                <input
+                  className={INPUT}
+                  placeholder="etiket ekle, Enter'a bas"
+                  value={form.tagInput}
+                  onChange={(e) => setForm({ ...form, tagInput: e.target.value })}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === ",") {
+                      e.preventDefault();
+                      const tag = form.tagInput.trim().toLowerCase().replace(/^#+/, "").replace(/\s+/g, "_");
+                      if (tag && !form.tags.includes(tag)) {
+                        setForm({ ...form, tags: [...form.tags, tag], tagInput: "" });
+                      } else {
+                        setForm({ ...form, tagInput: "" });
+                      }
+                    }
+                  }}
+                />
+              </div>
+              {form.tags.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {form.tags.map((tag) => (
+                    <span key={tag} className="flex items-center gap-1 rounded-full bg-[#9e4a5a]/10 px-2.5 py-0.5 text-[11px] font-medium text-[#9e4a5a]">
+                      #{tag}
+                      <button
+                        type="button"
+                        onClick={() => setForm({ ...form, tags: form.tags.filter((t) => t !== tag) })}
+                        className="ml-0.5 text-[#9e4a5a]/60 hover:text-[#9e4a5a]"
+                        aria-label={`${tag} kaldır`}
+                      >✕</button>
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
-            {error && <p className="text-sm text-red-400">{error}</p>}
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div>
+                <label className={LABEL}>Fiyat (₺) *</label>
+                <input
+                  className={INPUT}
+                  type="text"
+                  inputMode="decimal"
+                  required
+                  value={form.priceInput}
+                  onChange={(e) => {
+                    const raw = e.target.value.replace(",", ".");
+                    if (raw !== "" && !/^\d*\.?\d*$/.test(raw)) return;
+                    setForm({
+                      ...form,
+                      priceInput: raw,
+                      base_price_try: raw === "" ? 0 : Number.parseFloat(raw) || 0,
+                    });
+                  }}
+                  onBlur={() => {
+                    setForm((prev) => ({
+                      ...prev,
+                      priceInput: prev.base_price_try > 0 ? String(prev.base_price_try) : "",
+                    }));
+                  }}
+                />
+              </div>
+              <div>
+                <label className={LABEL}>Stok</label>
+                <input
+                  className={INPUT}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={form.stockInput}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    if (raw !== "" && !/^\d+$/.test(raw)) return;
+                    const stock = raw === "" ? 0 : parseNonNegativeInt(raw, 0);
+                    const sale_status =
+                      form.sale_status === "hidden"
+                        ? form.sale_status
+                        : saleStatusFromStock(stock, form.low_stock_threshold);
+                    setForm({
+                      ...form,
+                      stockInput: raw,
+                      stock,
+                      sale_status,
+                    });
+                  }}
+                  onBlur={() => {
+                    setForm((prev) => {
+                      const stock = parseNonNegativeInt(prev.stockInput, 0);
+                      const sale_status =
+                        prev.sale_status === "hidden"
+                          ? prev.sale_status
+                          : saleStatusFromStock(stock, prev.low_stock_threshold);
+                      return {
+                        ...prev,
+                        stock,
+                        stockInput: String(stock),
+                        sale_status,
+                      };
+                    });
+                  }}
+                />
+              </div>
+              <div>
+                <label className={LABEL}>Az Stok Eşiği</label>
+                <input
+                  className={INPUT}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={form.thresholdInput}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    if (raw !== "" && !/^\d+$/.test(raw)) return;
+                    const low_stock_threshold = raw === "" ? 0 : parseNonNegativeInt(raw, 0);
+                    const sale_status =
+                      form.sale_status === "hidden"
+                        ? form.sale_status
+                        : saleStatusFromStock(form.stock, low_stock_threshold);
+                    setForm({
+                      ...form,
+                      thresholdInput: raw,
+                      low_stock_threshold,
+                      sale_status,
+                    });
+                  }}
+                  onBlur={() => {
+                    setForm((prev) => {
+                      const low_stock_threshold = parseNonNegativeInt(prev.thresholdInput, 0);
+                      const sale_status =
+                        prev.sale_status === "hidden"
+                          ? prev.sale_status
+                          : saleStatusFromStock(prev.stock, low_stock_threshold);
+                      return {
+                        ...prev,
+                        low_stock_threshold,
+                        thresholdInput: String(low_stock_threshold),
+                        sale_status,
+                      };
+                    });
+                  }}
+                />
+              </div>
+            </div>
+            {error && <p className="text-sm text-red-600">{error}</p>}
             <div className="flex gap-2">
-              <button type="submit" disabled={saving} className="flex-1 rounded-lg bg-[#00e5ff]/10 py-2.5 text-sm font-semibold text-[#00e5ff] ring-1 ring-[#00e5ff]/30 hover:bg-[#00e5ff]/20 disabled:opacity-50">
+              <button type="submit" disabled={saving} className={`flex-1 ${ADMIN_BTN_PRIMARY} py-2.5 disabled:opacity-50`}>
                 {saving ? "Kaydediliyor..." : editingId ? "Değişiklikleri Kaydet" : "Ürün Ekle"}
               </button>
-              <button type="button" onClick={closeForm} className="rounded-lg border border-white/10 px-4 py-2.5 text-sm text-slate-400 hover:bg-white/5">İptal</button>
+              <button type="button" onClick={closeForm} className={`${ADMIN_BTN_SECONDARY} py-2.5`}>İptal</button>
             </div>
           </form>
         </div>
@@ -316,31 +543,40 @@ export default function AdminProductsPage() {
           const sc = PRODUCT_STATUS_STYLE[status];
           const stock = getProductStock(p);
           return (
-            <div key={p.id} className="rounded-xl border border-white/5 bg-[#1a2332] px-5 py-4">
+            <div key={p.id} className="rounded-xl border border-black/[0.06] bg-white px-5 py-4 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-medium ${sc.bg} ${sc.text}`}>
+                    <span className={`${ADMIN_BADGE} ${sc.bg} ${sc.text}`}>
                       {PRODUCT_STATUS_LABEL[status]}
                     </span>
-                    <p className="font-semibold text-white">{p.name_tr}</p>
+                    <p className="font-semibold text-slate-800">{p.name_tr}</p>
                   </div>
                   <div className="mt-2 flex flex-wrap gap-3 text-[11px] text-slate-500">
                     <span>{t.productTypes[p.type]}</span>
-                    <span className="font-medium text-emerald-400">{formatTRY(p.base_price_try)}</span>
+                    <span className="font-medium text-emerald-700">{formatTRY(p.base_price_try)}</span>
                     <span>Stok: {stock}</span>
                     <span>Az stok ≤{getProductThreshold(p)}</span>
                     <span className="font-mono opacity-50">{p.slug}</span>
                   </div>
+                  {p.tags && p.tags.length > 0 && (
+                    <div className="mt-1.5 flex flex-wrap gap-1">
+                      {p.tags.map((tag) => (
+                        <span key={tag} className="rounded-full bg-[#9e4a5a]/10 px-2 py-0.5 text-[10px] font-medium text-[#9e4a5a]">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  <button type="button" onClick={() => openEdit(p)} className="rounded-lg border border-white/10 px-3 py-1.5 text-[11px] text-slate-300 hover:bg-white/10">Düzenle</button>
-                  <button type="button" onClick={() => handleDelete(p)} className="rounded-lg border border-red-500/20 px-3 py-1.5 text-[11px] text-red-400 hover:bg-red-900/20">Sil</button>
+                  <button type="button" onClick={() => openEdit(p)} className={ADMIN_BTN_SECONDARY}>Düzenle</button>
+                  <button type="button" onClick={() => handleDelete(p)} className={ADMIN_BTN_DANGER}>Sil</button>
                 </div>
               </div>
 
               {/* Quick status change */}
-              <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-white/5 pt-3">
+              <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-black/[0.06] pt-3">
                 <span className="text-[10px] uppercase tracking-widest text-slate-500">Durum Değiştir</span>
                 {(Object.keys(PRODUCT_STATUS_LABEL) as ProductSaleStatus[])
                   .filter((s) => s !== status)
@@ -349,7 +585,7 @@ export default function AdminProductsPage() {
                       key={s}
                       type="button"
                       onClick={() => changeStatus(p, s)}
-                      className={`rounded-full px-2.5 py-0.5 text-[10px] font-medium ${PRODUCT_STATUS_STYLE[s].bg} ${PRODUCT_STATUS_STYLE[s].text} hover:opacity-80`}
+                      className={`${ADMIN_PILL} ${PRODUCT_STATUS_STYLE[s].bg} ${PRODUCT_STATUS_STYLE[s].text}`}
                     >
                       → {PRODUCT_STATUS_LABEL[s]}
                     </button>

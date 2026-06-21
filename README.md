@@ -61,10 +61,23 @@ This will:
 
 Copy these files manually between machines (never commit them).
 
-### Optional: PayTR
+### PayTR (official test mode → live)
 
-Add `PAYTR_MERCHANT_ID`, `PAYTR_MERCHANT_KEY`, `PAYTR_MERCHANT_SALT` to `backend/.env`.  
-See [docs/paytr-setup.md](docs/paytr-setup.md).
+**Quick start (Korean):** [docs/PAYTR-QUICKSTART-KO.md](docs/PAYTR-QUICKSTART-KO.md)
+
+1. Get `PAYTR_MERCHANT_ID`, `PAYTR_MERCHANT_KEY`, `PAYTR_MERCHANT_SALT` from PayTR panel.
+2. Set on Railway (test mode):
+
+```powershell
+.\scripts\set-paytr-railway.ps1 -MerchantId "..." -MerchantKey "..." -MerchantSalt "..."
+```
+
+3. Register callback URL in PayTR panel:
+   `https://dami-beauty-api-production.up.railway.app/api/v1/payment/paytr/callback`
+4. Verify: `GET /health` → `paytr.mode: "test"`
+5. Go live: set `PAYTR_TEST_MODE=false` (no code changes)
+
+Full guide: [docs/paytr-setup.md](docs/paytr-setup.md)
 
 ## Project structure
 

@@ -3,7 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.firebase import get_db_mode, get_db
-from app.api import products, campaigns, orders, paytr, admin, auth, social_proof
+from app.services.paytr import get_paytr_mode, is_paytr_configured
+from app.api import products, campaigns, orders, paytr, admin, auth, social_proof, address
 
 api_router = APIRouter()
 api_router.include_router(products.router)
@@ -15,6 +16,7 @@ api_router.include_router(admin.router)
 api_router.include_router(admin.instagram_router)
 api_router.include_router(auth.router)
 api_router.include_router(social_proof.router)
+api_router.include_router(address.router)
 
 
 def create_app() -> FastAPI:
@@ -50,6 +52,11 @@ def create_app() -> FastAPI:
             "env": settings.app_env,
             "db": mode,
             "firestore_connected": firestore_ok,
+            "paytr": {
+                "mode": get_paytr_mode(),
+                "configured": is_paytr_configured(),
+                "test_mode": settings.paytr_test_mode,
+            },
         }
 
     app.include_router(api_router, prefix=settings.api_v1_prefix)

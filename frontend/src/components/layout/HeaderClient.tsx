@@ -19,24 +19,24 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
 
   return (
     <>
-      <div className="mx-auto flex h-12 w-full max-w-7xl items-center gap-4 px-5 md:h-14">
+      <div className="relative mx-auto flex h-12 w-full max-w-7xl items-center justify-between px-5 md:h-14">
         {/* Left: menu */}
         <button
           type="button"
           onClick={() => setMenuOpen(true)}
           className={`group flex shrink-0 items-center gap-2.5 ${HEADER_CTRL}`}
-          aria-label={t.nav.menu}
+          aria-label="Menu"
         >
           <span className="relative flex h-4 w-4 flex-col justify-center">
             <span className="block h-px w-4 bg-current" />
             <span className="mt-[5px] block h-px w-3 bg-current transition-all duration-200 group-hover:w-4" />
           </span>
           <span className="hidden text-[10px] font-medium uppercase tracking-[0.22em] sm:block">
-            {t.nav.menu}
+            Menu
           </span>
         </button>
 
-        {/* Center: brand */}
+        {/* Center: brand — always visible, not covered by search */}
         <Link
           href="/"
           className="absolute left-1/2 -translate-x-1/2 text-[13px] font-semibold uppercase tracking-[0.18em] text-dami-900"
@@ -44,8 +44,8 @@ export function HeaderClient({ cartOnly }: { cartOnly?: boolean } = {}) {
           {t.brand.name}
         </Link>
 
-        {/* Right: search (expanded) + cart */}
-        <div className="ml-auto flex min-w-0 flex-1 items-center justify-end gap-3 sm:max-w-md md:gap-4">
+        {/* Right: compact search + cart */}
+        <div className="flex shrink-0 items-center gap-3 md:gap-4">
           <HeaderSearch />
           <Link
             href="/cart"

@@ -10,10 +10,10 @@ export const PRODUCT_STATUS_LABEL: Record<ProductSaleStatus, string> = {
 };
 
 export const PRODUCT_STATUS_STYLE: Record<ProductSaleStatus, { bg: string; text: string }> = {
-  on_sale: { bg: "bg-emerald-900/40", text: "text-emerald-400" },
-  low_stock: { bg: "bg-amber-900/40", text: "text-amber-400" },
-  out_of_stock: { bg: "bg-red-900/40", text: "text-red-400" },
-  hidden: { bg: "bg-slate-700/40", text: "text-slate-400" },
+  on_sale: { bg: "bg-emerald-50 border-emerald-200", text: "text-emerald-800" },
+  low_stock: { bg: "bg-amber-50 border-amber-200", text: "text-amber-800" },
+  out_of_stock: { bg: "bg-red-50 border-red-200", text: "text-red-800" },
+  hidden: { bg: "bg-slate-50 border-slate-200", text: "text-slate-600" },
 };
 
 export function getProductStock(product: Product) {

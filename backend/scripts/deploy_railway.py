@@ -60,6 +60,8 @@ def main() -> int:
         "FIREBASE_PROJECT_ID": "dami-beauty-353b0",
         "CORS_ALLOW_VERCEL": "true",
         "PAYTR_TEST_MODE": "true",
+        "PAYTR_ALLOW_DEV_MOCK": "false",
+        "BACKEND_URL": "https://dami-beauty-api-production.up.railway.app",
         "FRONTEND_URL": "https://dami-beauty.vercel.app",
         "FIREBASE_WEB_API_KEY": "AIzaSyDqrhqJY1YKRnmy-3tBldJODPeC-al17EQ",
         "FREE_SHIPPING_THRESHOLD_TRY": "99999",

@@ -12,12 +12,12 @@ export const ORDER_STATUS_LABEL: Record<string, string> = {
 };
 
 export const ORDER_STATUS_STYLE: Record<string, { bg: string; text: string }> = {
-  pending: { bg: "bg-amber-900/40", text: "text-amber-400" },
-  paid: { bg: "bg-emerald-900/40", text: "text-emerald-400" },
-  processing: { bg: "bg-blue-900/40", text: "text-blue-400" },
-  shipped: { bg: "bg-purple-900/40", text: "text-purple-400" },
-  delivered: { bg: "bg-teal-900/40", text: "text-teal-400" },
-  cancelled: { bg: "bg-red-900/40", text: "text-red-400" },
+  pending: { bg: "bg-amber-50 border-amber-200", text: "text-amber-800" },
+  paid: { bg: "bg-emerald-50 border-emerald-200", text: "text-emerald-800" },
+  processing: { bg: "bg-blue-50 border-blue-200", text: "text-blue-800" },
+  shipped: { bg: "bg-purple-50 border-purple-200", text: "text-purple-800" },
+  delivered: { bg: "bg-teal-50 border-teal-200", text: "text-teal-800" },
+  cancelled: { bg: "bg-red-50 border-red-200", text: "text-red-800" },
 };
 
 export function formatAdminDate(s?: string | null) {
